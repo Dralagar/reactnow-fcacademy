@@ -1,54 +1,59 @@
-// components/ParabolicGrid.tsx
 "use client";
 
-import { motion } from "framer-motion";
-import { ReactNode } from "react";
+import { motion, type Variants } from "framer-motion";
+import { Children, type ReactNode } from "react";
 
 interface ParabolicGridProps {
   children: ReactNode;
   columns?: 1 | 2 | 3 | 4;
   gap?: string;
   className?: string;
+  staggerChildren?: number;
+  delayChildren?: number;
 }
 
-export default function ParabolicGrid({ 
-  children, 
+const gridCols: Record<1 | 2 | 3 | 4, string> = {
+  1: "grid-cols-1",
+  2: "grid-cols-1 md:grid-cols-2",
+  3: "grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
+  4: "grid-cols-1 md:grid-cols-2 xl:grid-cols-4",
+};
+
+export default function ParabolicGrid({
+  children,
   columns = 3,
   gap = "gap-8",
-  className = "" 
+  className = "",
+  staggerChildren = 0.12,
+  delayChildren = 0.08,
 }: ParabolicGridProps) {
-  const gridCols = {
-    1: "grid-cols-1",
-    2: "grid-cols-1 md:grid-cols-2",
-    3: "grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
-    4: "grid-cols-1 md:grid-cols-2 lg:grid-cols-4",
-  };
+  const items = Children.toArray(children);
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
+        staggerChildren,
+        delayChildren,
       },
     },
   };
 
-  const itemVariants = {
-    hidden: { 
-      opacity: 0, 
-      y: 30,
-      scale: 0.9,
+  const itemVariants: Variants = {
+    hidden: {
+      opacity: 0,
+      y: 24,
+      scale: 0.96,
     },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
       scale: 1,
       transition: {
         type: "spring",
-        stiffness: 200,
-        damping: 20,
+        stiffness: 140,
+        damping: 18,
       },
     },
   };
@@ -59,16 +64,13 @@ export default function ParabolicGrid({
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-50px" }}
+      viewport={{ once: true, amount: 0.15 }}
     >
-      {Array.isArray(children) 
-        ? children.map((child, index) => (
-            <motion.div key={index} variants={itemVariants}>
-              {child}
-            </motion.div>
-          ))
-        : <motion.div variants={itemVariants}>{children}</motion.div>
-      }
+      {items.map((child, index) => (
+        <motion.div key={index} variants={itemVariants} className="h-full">
+          {child}
+        </motion.div>
+      ))}
     </motion.div>
   );
 }

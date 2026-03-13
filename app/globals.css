@@ -8,11 +8,11 @@
 
 :root {
   /* Brand */
-  --primary: #94cbd0;
-  --primary-dark: #435b59;
-  --primary-light: #14b8a6;
-  --secondary: #65ba69;
-  --accent: #c8b79b;
+  --primary: #059669;
+  --primary-dark: #047857;
+  --primary-light: #34d399;
+  --secondary: #0b2322;
+  --accent: #fbbf24;
 
   /* Surface + Text */
   --background: #ffffff;
@@ -420,13 +420,13 @@
   }
 
   .btn-soft {
-    background: rgb(13 92 99 / 0.08);
+    background: rgb(5 150 105 / 0.06);
     color: var(--primary);
-    border-color: rgb(13 92 99 / 0.12);
+    border-color: rgb(5 150 105 / 0.18);
   }
 
   .btn-soft:hover {
-    background: rgb(13 92 99 / 0.14);
+    background: rgb(5 150 105 / 0.12);
   }
 
   .btn-dark {
@@ -500,6 +500,33 @@
     background: var(--surface);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-sm);
+  }
+
+  .parabolic-card {
+    position: relative;
+    border-radius: 1.75rem;
+    border: 1px solid rgb(15 118 110 / 0.18);
+    background:
+      radial-gradient(circle at top left, rgba(20, 184, 166, 0.12), transparent 55%),
+      linear-gradient(145deg, #0b2322, #081c1b);
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.55);
+    overflow: hidden;
+  }
+
+  .parabolic-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at bottom right, rgba(148, 210, 204, 0.18), transparent 55%);
+    opacity: 0.9;
+    mix-blend-mode: screen;
+    pointer-events: none;
+  }
+
+  .parabolic-card-content {
+    position: relative;
+    padding: clamp(1.75rem, 3vw, 2.25rem);
+    color: #ecfdf5;
   }
 
   .input,

@@ -22,7 +22,7 @@ module.exports = {
           900: "#064e3b",
         },
         secondary: {
-          DEFAULT: "#000000",
+          DEFAULT: "#0b2322",
         },
         accent: {
           DEFAULT: "#fbbf24",
@@ -30,6 +30,14 @@ module.exports = {
       },
       backgroundImage: {
         "brand-gradient": "linear-gradient(135deg, #059669 0%, #047857 100%)",
+        "parabolic-surface":
+          "radial-gradient(circle at top, rgba(20,184,166,0.22), transparent 55%), linear-gradient(145deg, #0b2322 0%, #081c1b 45%, #0c1f1f 100%)",
+      },
+      borderRadius: {
+        "parabolic-card": "1.75rem",
+      },
+      boxShadow: {
+        "parabolic-soft": "0 18px 45px rgba(15,23,42,0.35)",
       },
     },
   },
