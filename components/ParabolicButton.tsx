@@ -1,157 +1,243 @@
 // components/ParabolicButton.tsx
 "use client";
 
-import { motion } from "framer-motion";
+import type { ButtonHTMLAttributes, ReactNode } from "react";
 import Link from "next/link";
-import { ReactNode, useState } from "react";
+import { motion, type Variants } from "framer-motion";
+import { Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-interface ParabolicButtonProps {
+type ButtonVariant = "primary" | "secondary" | "outline" | "ghost";
+type ButtonSize = "sm" | "md" | "lg" | "xl";
+
+interface SharedParabolicButtonProps {
   children: ReactNode;
   href?: string;
-  onClick?: () => void;
-  variant?: "primary" | "secondary" | "outline" | "ghost";
-  size?: "sm" | "md" | "lg" | "xl";
+  variant?: ButtonVariant;
+  size?: ButtonSize;
   className?: string;
   fullWidth?: boolean;
   icon?: ReactNode;
   iconPosition?: "left" | "right";
-  disabled?: boolean;
   loading?: boolean;
 }
 
-export default function ParabolicButton({ 
-  children, 
-  href, 
-  onClick,
-  variant = "primary",
-  size = "md",
-  className = "",
-  fullWidth = false,
+type NativeButtonProps = Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  | "children"
+  | "onAnimationStart"
+  | "onAnimationEnd"
+  | "onDrag"
+  | "onDragStart"
+  | "onDragEnd"
+  | "onDragEnter"
+  | "onDragLeave"
+  | "onDragOver"
+  | "onDragExit"
+  | "onDrop"
+>;
+
+type ParabolicButtonProps = SharedParabolicButtonProps & NativeButtonProps;
+
+const iconVariants: Variants = {
+  rest: { x: 0, opacity: 1 },
+  hoverLeft: {
+    x: -2,
+    opacity: 1,
+    transition: { duration: 0.2, ease: [0.22, 1, 0.36, 1] },
+  },
+  hoverRight: {
+    x: 2,
+    opacity: 1,
+    transition: { duration: 0.2, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
+const baseClasses =
+  "group relative inline-flex items-center justify-center overflow-hidden rounded-2xl font-semibold tracking-tight outline-none transition-all duration-300 focus-visible:ring-2 focus-visible:ring-sky-500/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:pointer-events-none disabled:opacity-60 dark:focus-visible:ring-offset-slate-950";
+
+const variantClasses: Record<ButtonVariant, string> = {
+  primary:
+    "border border-sky-600 bg-sky-600 text-white shadow-[0_12px_30px_-12px_rgba(2,132,199,0.6)] hover:border-sky-500 hover:bg-sky-500",
+  secondary:
+    "border border-slate-900 bg-slate-900 text-white shadow-[0_12px_30px_-12px_rgba(15,23,42,0.45)] hover:bg-slate-800 dark:border-white/10 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100",
+  outline:
+    "border border-slate-300 bg-white text-slate-900 hover:border-slate-400 hover:bg-slate-50 dark:border-white/15 dark:bg-transparent dark:text-white dark:hover:bg-white/5",
+  ghost:
+    "border border-transparent bg-transparent text-slate-900 hover:bg-slate-100 dark:text-white dark:hover:bg-white/5",
+};
+
+const sizeClasses: Record<ButtonSize, string> = {
+  sm: "min-h-10 gap-2 px-4 text-sm",
+  md: "min-h-11 gap-2.5 px-5 text-sm sm:px-6 sm:text-base",
+  lg: "min-h-12 gap-3 px-6 text-base sm:px-7",
+  xl: "min-h-14 gap-3 px-7 text-base sm:px-8 sm:text-lg",
+};
+
+function ButtonInner({
+  children,
   icon,
-  iconPosition = "left",
-  disabled = false,
-  loading = false
-}: ParabolicButtonProps) {
-  const [isHovered, setIsHovered] = useState(false);
+  iconPosition,
+  loading,
+  variant,
+}: {
+  children: ReactNode;
+  icon?: ReactNode;
+  iconPosition: "left" | "right";
+  loading: boolean;
+  variant: ButtonVariant;
+}) {
+  const spinnerTone =
+    variant === "primary" || variant === "secondary"
+      ? "text-white"
+      : "text-slate-900 dark:text-white";
 
-  const baseClasses = "relative overflow-hidden rounded-lg font-semibold transition-all duration-300 inline-flex items-center justify-center group disabled:opacity-50 disabled:cursor-not-allowed";
-  
-  const variants = {
-    primary: "bg-primary text-white hover:bg-primary-dark",
-    secondary: "bg-secondary text-white hover:bg-gray-900",
-    outline: "border-2 border-primary text-primary hover:bg-primary hover:text-white",
-    ghost: "text-primary hover:bg-primary/10",
-  };
-
-  const sizes = {
-    sm: "px-4 py-2 text-sm gap-2",
-    md: "px-6 py-3 text-base gap-2",
-    lg: "px-8 py-4 text-lg gap-3",
-    xl: "px-10 py-5 text-xl gap-4",
-  };
-
-  const width = fullWidth ? "w-full" : "";
-
-  const ButtonContent = () => (
+  return (
     <>
-      {loading && (
-        <motion.div
-          className="absolute inset-0 flex items-center justify-center bg-inherit"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-        </motion.div>
-      )}
-      
-      <span className={`relative z-10 flex items-center gap-2 ${loading ? 'opacity-0' : ''}`}>
-        {icon && iconPosition === "left" && (
-          <motion.span
-            animate={{ x: isHovered ? -3 : 0 }}
-            transition={{ type: "spring", stiffness: 400 }}
-          >
-            {icon}
-          </motion.span>
+      <span
+        aria-hidden="true"
+        className={cn(
+          "pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100",
+          variant === "primary" &&
+            "bg-[linear-gradient(135deg,rgba(255,255,255,0.10),transparent_40%,rgba(255,255,255,0.06))]",
+          variant === "secondary" &&
+            "bg-[linear-gradient(135deg,rgba(255,255,255,0.08),transparent_40%,rgba(255,255,255,0.04))]",
+          variant === "outline" &&
+            "bg-[linear-gradient(135deg,rgba(2,132,199,0.04),transparent_45%,rgba(15,23,42,0.03))] dark:bg-[linear-gradient(135deg,rgba(255,255,255,0.05),transparent_45%,rgba(255,255,255,0.02))]",
+          variant === "ghost" &&
+            "bg-[linear-gradient(135deg,rgba(15,23,42,0.03),transparent_45%,rgba(15,23,42,0.02))] dark:bg-[linear-gradient(135deg,rgba(255,255,255,0.04),transparent_45%,rgba(255,255,255,0.02))]"
         )}
-        {children}
-        {icon && iconPosition === "right" && (
-          <motion.span
-            animate={{ x: isHovered ? 3 : 0 }}
-            transition={{ type: "spring", stiffness: 400 }}
-          >
-            {icon}
-          </motion.span>
+      />
+
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent opacity-70"
+      />
+
+      <span className="relative z-10 inline-flex items-center justify-center gap-inherit">
+        {loading ? (
+          <>
+            <Loader2 className={cn("h-4 w-4 animate-spin", spinnerTone)} />
+            <span>Loading...</span>
+          </>
+        ) : (
+          <>
+            {icon && iconPosition === "left" && (
+              <motion.span
+                variants={iconVariants}
+                initial="rest"
+                whileHover="hoverLeft"
+                className="inline-flex shrink-0 items-center"
+              >
+                {icon}
+              </motion.span>
+            )}
+
+            <span>{children}</span>
+
+            {icon && iconPosition === "right" && (
+              <motion.span
+                variants={iconVariants}
+                initial="rest"
+                whileHover="hoverRight"
+                className="inline-flex shrink-0 items-center"
+              >
+                {icon}
+              </motion.span>
+            )}
+          </>
         )}
       </span>
-      
-      {/* Parabolic background animation */}
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-primary-dark via-primary to-primary-light"
-        initial={{ x: "-100%" }}
-        animate={{ x: isHovered ? "100%" : "-100%" }}
-        transition={{ duration: 0.8, ease: "easeInOut" }}
-        style={{ opacity: variant === "primary" ? 1 : 0.2 }}
-      />
-      
-      {/* Parabolic ripple effect on hover */}
-      <motion.div
-        className="absolute inset-0 bg-white"
-        initial={{ scale: 0, opacity: 0.5 }}
-        animate={isHovered ? { scale: 2, opacity: 0 } : { scale: 0, opacity: 0.5 }}
-        transition={{ duration: 0.6 }}
-        style={{ borderRadius: "50%", originX: 0.5, originY: 0.5 }}
-      />
 
-      {/* Parabolic border glow */}
-      <motion.div
-        className="absolute inset-0 rounded-lg"
-        animate={{
-          boxShadow: isHovered 
-            ? ['0 0 0 0 rgba(5, 150, 105, 0)', '0 0 20px 4px rgba(5, 150, 105, 0.5)', '0 0 0 0 rgba(5, 150, 105, 0)']
-            : '0 0 0 0 rgba(5, 150, 105, 0)'
-        }}
-        transition={{ duration: 1.5, repeat: isHovered ? Infinity : 0 }}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10"
       />
     </>
   );
+}
 
-  if (disabled || loading) {
-    return (
-      <button
-        disabled
-        className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${width} ${className} cursor-not-allowed`}
-      >
-        <ButtonContent />
-      </button>
-    );
-  }
+export default function ParabolicButton({
+  children,
+  href,
+  variant = "primary",
+  size = "md",
+  className,
+  fullWidth = false,
+  icon,
+  iconPosition = "right",
+  loading = false,
+  disabled = false,
+  type = "button",
+  ...props
+}: ParabolicButtonProps) {
+  const sharedClassName = cn(
+    baseClasses,
+    variantClasses[variant],
+    sizeClasses[size],
+    fullWidth && "w-full",
+    className
+  );
 
   if (href) {
+    const isInactive = disabled || loading;
+
     return (
-      <Link 
-        href={href} 
-        className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${width} ${className}`}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+      <motion.div
+        whileHover={
+          isInactive
+            ? undefined
+            : {
+                y: -1,
+                transition: { duration: 0.2, ease: [0.22, 1, 0.36, 1] },
+              }
+        }
+        whileTap={isInactive ? undefined : { scale: 0.99 }}
+        className={cn(fullWidth && "w-full")}
       >
-        <ButtonContent />
-      </Link>
+        <Link
+          href={isInactive ? "#" : href}
+          aria-disabled={isInactive}
+          tabIndex={isInactive ? -1 : 0}
+          className={cn(sharedClassName, isInactive && "pointer-events-none")}
+        >
+          <ButtonInner
+            icon={icon}
+            iconPosition={iconPosition}
+            loading={loading}
+            variant={variant}
+          >
+            {children}
+          </ButtonInner>
+        </Link>
+      </motion.div>
     );
   }
 
   return (
     <motion.button
-      onClick={onClick}
-      className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${width} ${className}`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      transition={{ type: "spring", stiffness: 400, damping: 17 }}
-      disabled={disabled}
+      type={type}
+      disabled={disabled || loading}
+      className={sharedClassName}
+      whileHover={
+        disabled || loading
+          ? undefined
+          : {
+              y: -1,
+              transition: { duration: 0.2, ease: [0.22, 1, 0.36, 1] },
+            }
+      }
+      whileTap={disabled || loading ? undefined : { scale: 0.99 }}
+      {...props}
     >
-      <ButtonContent />
+      <ButtonInner
+        icon={icon}
+        iconPosition={iconPosition}
+        loading={loading}
+        variant={variant}
+      >
+        {children}
+      </ButtonInner>
     </motion.button>
   );
 }

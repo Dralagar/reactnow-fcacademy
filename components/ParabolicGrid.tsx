@@ -10,6 +10,8 @@ interface ParabolicGridProps {
   className?: string;
   staggerChildren?: number;
   delayChildren?: number;
+  itemClassName?: string;
+  as?: "div" | "section";
 }
 
 const gridCols: Record<1 | 2 | 3 | 4, string> = {
@@ -26,11 +28,15 @@ export default function ParabolicGrid({
   className = "",
   staggerChildren = 0.12,
   delayChildren = 0.08,
+  itemClassName = "",
+  as = "div",
 }: ParabolicGridProps) {
   const items = Children.toArray(children);
 
   const containerVariants: Variants = {
-    hidden: { opacity: 0 },
+    hidden: {
+      opacity: 0,
+    },
     visible: {
       opacity: 1,
       transition: {
@@ -45,21 +51,26 @@ export default function ParabolicGrid({
       opacity: 0,
       y: 24,
       scale: 0.96,
+      filter: "blur(4px)",
     },
     visible: {
       opacity: 1,
       y: 0,
       scale: 1,
+      filter: "blur(0px)",
       transition: {
         type: "spring",
         stiffness: 140,
         damping: 18,
+        mass: 0.8,
       },
     },
   };
 
+  const MotionTag = motion[as];
+
   return (
-    <motion.div
+    <MotionTag
       className={`grid ${gridCols[columns]} ${gap} ${className}`}
       variants={containerVariants}
       initial="hidden"
@@ -67,10 +78,14 @@ export default function ParabolicGrid({
       viewport={{ once: true, amount: 0.15 }}
     >
       {items.map((child, index) => (
-        <motion.div key={index} variants={itemVariants} className="h-full">
+        <motion.div
+          key={index}
+          variants={itemVariants}
+          className={`h-full will-change-transform ${itemClassName}`}
+        >
           {child}
         </motion.div>
       ))}
-    </motion.div>
+    </MotionTag>
   );
 }

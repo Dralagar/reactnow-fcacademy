@@ -1,127 +1,154 @@
 // components/ParabolicCard.tsx
 "use client";
 
-import { motion } from "framer-motion";
-import { ReactNode, useState } from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
+import { motion, type Variants } from "framer-motion";
+import { cn } from "@/lib/utils";
 
-interface ParabolicCardProps {
+type CardElement = "div" | "article" | "section";
+
+type BaseCardProps = Omit<
+  ComponentPropsWithoutRef<"div">,
+  | "children"
+  | "onAnimationStart"
+  | "onAnimationEnd"
+  | "onDrag"
+  | "onDragStart"
+  | "onDragEnd"
+  | "onDragEnter"
+  | "onDragLeave"
+  | "onDragOver"
+  | "onDragExit"
+  | "onDrop"
+>;
+
+interface ParabolicCardProps extends BaseCardProps {
   children: ReactNode;
   className?: string;
-  onClick?: () => void;
+  contentClassName?: string;
   hoverEffect?: boolean;
   glowEffect?: boolean;
   delay?: number;
+  as?: CardElement;
 }
 
-export default function ParabolicCard({ 
-  children, 
-  className = "", 
-  onClick,
+const cardVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 24,
+  },
+  visible: (delay: number = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.55,
+      delay,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  }),
+};
+
+export default function ParabolicCard({
+  children,
+  className,
+  contentClassName,
   hoverEffect = true,
   glowEffect = true,
-  delay = 0
+  delay = 0,
+  as = "div",
+  ...props
 }: ParabolicCardProps) {
-  const [isHovered, setIsHovered] = useState(false);
-
-  return (
-    <motion.div
-      className={`relative overflow-hidden rounded-2xl bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm shadow-xl ${className}`}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-      whileHover={hoverEffect ? { 
-        y: -8,
-        scale: 1.02,
-        transition: { 
-          type: "spring", 
-          stiffness: 400, 
-          damping: 17,
-          mass: 0.5
+  const commonProps = {
+    className: cn(
+      "group relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-[0_18px_50px_-20px_rgba(15,23,42,0.22)]",
+      "backdrop-blur supports-[backdrop-filter]:bg-white/95",
+      "dark:border-white/10 dark:bg-slate-950/70 dark:shadow-[0_18px_50px_-20px_rgba(0,0,0,0.45)]",
+      hoverEffect &&
+        "transition-transform duration-300 will-change-transform hover:-translate-y-1.5",
+      className
+    ),
+    variants: cardVariants,
+    initial: "hidden" as const,
+    whileInView: "visible" as const,
+    viewport: { once: true, amount: 0.2 },
+    custom: delay,
+    whileHover: hoverEffect
+      ? {
+          scale: 1.01,
+          transition: {
+            duration: 0.25,
+            ease: [0.22, 1, 0.36, 1] as const,
+          },
         }
-      } : undefined}
-      whileTap={hoverEffect ? { scale: 0.98 } : undefined}
-      onClick={onClick}
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.6, delay, type: "spring", stiffness: 100 }}
-    >
-      {/* Parabolic gradient overlay */}
+      : undefined,
+    whileTap: hoverEffect ? { scale: 0.995 } : undefined,
+    ...props,
+  };
+
+  const content = (
+    <>
+      <div
+        aria-hidden="true"
+        className={cn(
+          "pointer-events-none absolute inset-0",
+          "bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.92),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(59,130,246,0.12),transparent_28%)]",
+          "dark:bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.08),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(59,130,246,0.14),transparent_28%)]"
+        )}
+      />
+
       <motion.div
-        className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10"
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-slate-300/80 to-transparent dark:via-white/40"
         animate={{
-          backgroundPosition: ['0% 0%', '100% 100%'],
-          opacity: isHovered ? 0.8 : 0.5
+          opacity: hoverEffect ? [0.4, 0.85, 0.4] : 0.45,
         }}
         transition={{
-          duration: 8,
+          duration: 3.2,
           repeat: Infinity,
-          repeatType: "reverse",
-        }}
-        style={{
-          backgroundSize: '200% 200%',
+          ease: "easeInOut",
         }}
       />
-      
-      {/* Glow effect */}
+
       {glowEffect && (
-        <motion.div
-          className="absolute -inset-1 bg-primary/20 rounded-2xl blur-xl -z-10"
-          animate={{
-            opacity: isHovered ? 0.7 : 0.3,
-            scale: isHovered ? 1.05 : 1,
-          }}
-          transition={{ duration: 0.3 }}
+        <div
+          aria-hidden="true"
+          className={cn(
+            "pointer-events-none absolute inset-0 rounded-3xl opacity-0 blur-2xl transition-opacity duration-300",
+            "bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,0.12),transparent_58%)]",
+            "dark:bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.08),transparent_58%)]",
+            hoverEffect && "group-hover:opacity-100"
+          )}
         />
       )}
 
-      {/* Floating particles on hover */}
-      {isHovered && (
-        <>
-          {[...Array(5)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-primary rounded-full"
-              initial={{ 
-                x: '50%', 
-                y: '50%',
-                opacity: 0.8
-              }}
-              animate={{
-                x: `${50 + (Math.random() - 0.5) * 100}%`,
-                y: `${50 + (Math.random() - 0.5) * 100}%`,
-                opacity: 0,
-                scale: 0
-              }}
-              transition={{
-                duration: 1,
-                delay: i * 0.1,
-                ease: "easeOut"
-              }}
-            />
-          ))}
-        </>
-      )}
-      
-      {/* Content */}
-      <div className="relative z-10 p-6">
+      <div
+        className={cn(
+          "relative z-10 rounded-3xl p-6 sm:p-7 lg:p-8",
+          contentClassName
+        )}
+      >
         {children}
       </div>
 
-      {/* Parabolic border animation */}
-      <motion.div
-        className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-primary"
-        initial={{ scaleX: 0 }}
-        whileInView={{ scaleX: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1, delay: delay + 0.3 }}
-        style={{ originX: 0 }}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-6 bottom-0 h-px bg-gradient-to-r from-transparent via-slate-300/70 to-transparent dark:via-white/15"
       />
 
-      {/* Corner accents */}
-      <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-primary/30 rounded-tl-2xl" />
-      <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-primary/30 rounded-tr-2xl" />
-      <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-primary/30 rounded-bl-2xl" />
-      <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-primary/30 rounded-br-2xl" />
-    </motion.div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-slate-200/70 dark:ring-white/10"
+      />
+    </>
   );
+
+  if (as === "article") {
+    return <motion.article {...commonProps}>{content}</motion.article>;
+  }
+
+  if (as === "section") {
+    return <motion.section {...commonProps}>{content}</motion.section>;
+  }
+
+  return <motion.div {...commonProps}>{content}</motion.div>;
 }

@@ -1,41 +1,75 @@
-// components/ParabolicSection.tsx
 "use client";
 
 import { ReactNode } from "react";
-import { motion } from "framer-motion";
-import ParabolicBackground from "./ParabolicBackground";
+import { motion, type Variants } from "framer-motion";
+import { cn } from "@/lib/utils";
+import ParabolicBackground from "@/components/ParabolicBackground";
 
 interface ParabolicSectionProps {
   children: ReactNode;
-  className?: string;
   id?: string;
+  className?: string;
+  containerClassName?: string;
   withBackground?: boolean;
   backgroundIntensity?: number;
+  as?: "section" | "div";
 }
 
-export default function ParabolicSection({ 
-  children, 
-  className = "", 
+const sectionVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 24,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
+export default function ParabolicSection({
+  children,
   id,
+  className,
+  containerClassName,
   withBackground = false,
-  backgroundIntensity = 0.3
+  backgroundIntensity = 0.25,
+  as = "section",
 }: ParabolicSectionProps) {
+  const MotionTag = motion[as];
+
   return (
-    <motion.section
+    <MotionTag
       id={id}
-      className={`relative py-20 overflow-hidden ${className}`}
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.6 }}
+      className={cn(
+        "relative overflow-hidden",
+        "py-16 sm:py-20 lg:py-24",
+        className
+      )}
+      variants={sectionVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-120px" }}
     >
+      {/* Background Layer */}
       {withBackground && (
         <ParabolicBackground intensity={backgroundIntensity} />
       )}
-      
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      {/* Content Container */}
+      <div
+        className={cn(
+          "relative z-10",
+          "mx-auto w-full max-w-7xl",
+          "px-4 sm:px-6 lg:px-8",
+          containerClassName
+        )}
+      >
         {children}
       </div>
-    </motion.section>
+    </MotionTag>
   );
 }
