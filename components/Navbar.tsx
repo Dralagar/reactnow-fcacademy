@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState, type ComponentType } from "react";
 import Link from "next/link";
+import Image from "next/image"   
 import { usePathname } from "next/navigation";
+import { SITE_IMAGES } from "@/lib/site-images";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   BarChart3,
@@ -66,24 +68,19 @@ const navigationItems: NavItem[] = [
     icon: Users,
     submenu: [
       {
-        name: "Players",
-        href: "/team/players",
-        description: "Profiles and stories from our young talent.",
+        name: "Meet the Team",
+        href: "/team",
+        description: "Squad, coaches, and the faces behind the academy.",
       },
       {
-        name: "Coaches",
-        href: "/team/coaches",
-        description: "The mentors building discipline and growth.",
+        name: "Staff & leadership",
+        href: "/about/team",
+        description: "Founders, head coach, and core leadership.",
       },
       {
-        name: "Rising Stars",
-        href: "/team/rising-stars",
-        description: "Emerging players showing strong potential.",
-      },
-      {
-        name: "Player of the Week",
-        href: "/team/player-of-week",
-        description: "Celebrating progress, effort, and leadership.",
+        name: "Player highlights",
+        href: "/team/highlights",
+        description: "Spotlights, match moments, and rising talent.",
       },
     ],
   },
@@ -243,10 +240,10 @@ export default function Navbar() {
         }}
       >
         <div style={{
-          maxWidth: '1280px',
+          maxWidth: '1440px',
           margin: '0 auto',
           padding: '0 1rem',
-          height: scrolled ? '60px' : '72px',
+          height: scrolled ? '76px' : '96px',
           transition: 'height 0.3s ease'
         }}>
           {/* Main navbar row - flex layout */}
@@ -270,31 +267,40 @@ export default function Navbar() {
               }}
               onClick={() => mobileOpen && setMobileOpen(false)}
             >
-              <div style={{
-                width: scrolled ? '36px' : '40px',
-                height: scrolled ? '36px' : '40px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: '#0f172a',
-                color: 'white',
-                borderRadius: '10px',
-                transition: 'all 0.3s ease'
-              }}>
-                <span style={{ fontSize: scrolled ? '16px' : '18px' }}>⚽</span>
-              </div>
+<div
+  style={{
+    width: scrolled ? "56px" : "72px",
+    height: scrolled ? "56px" : "72px",
+    position: "relative",
+    flexShrink: 0,
+    transition: "all 0.3s ease",
+  }}
+>
+  <Image
+    src={SITE_IMAGES.logo}
+    alt="React Now FC Logo"
+    fill
+    sizes="(max-width: 768px) 72px, 72px"
+    style={{
+      objectFit: "contain",
+      padding: "2px",
+    }}
+    priority
+  />
+</div>
               <div>
                 <div style={{ 
                   fontWeight: 600,
-                  fontSize: scrolled ? '13px' : '15px',
+                  fontSize: scrolled ? '14px' : '16px',
                   transition: 'font-size 0.3s ease',
                   color: '#0f172a',
-                  lineHeight: 1.2
+                  lineHeight: 1.2,
+                  
                 }}>
                   React Now FC
                 </div>
                 <div style={{ 
-                  fontSize: scrolled ? '9px' : '11px',
+                  fontSize: scrolled ? '10px' : '11px',
                   color: '#64748b',
                   letterSpacing: '0.1em',
                   textTransform: 'uppercase',
@@ -338,13 +344,13 @@ export default function Navbar() {
                               display: 'inline-flex',
                               alignItems: 'center',
                               gap: '6px',
-                              padding: '8px 12px',
+                              padding: '7px 10px',
                               background: active ? '#0f172a' : 'transparent',
                               color: active ? 'white' : '#334155',
                               border: 'none',
                               borderRadius: '10px',
                               cursor: 'pointer',
-                              fontSize: '14px',
+                              fontSize: '13px',
                               fontWeight: 500,
                               transition: 'all 0.2s ease'
                             }}
@@ -396,7 +402,7 @@ export default function Navbar() {
                                         onClick={() => setDesktopMenu(null)}
                                       >
                                         <div style={{
-                                          fontSize: '14px',
+                                          fontSize: '13px',
                                           fontWeight: 500
                                         }}>
                                           {sub.name}
@@ -430,12 +436,12 @@ export default function Navbar() {
                           display: 'inline-flex',
                           alignItems: 'center',
                           gap: '6px',
-                          padding: '8px 12px',
+                          padding: '7px 10px',
                           background: active ? '#0f172a' : 'transparent',
                           color: active ? 'white' : '#334155',
                           borderRadius: '10px',
                           textDecoration: 'none',
-                          fontSize: '14px',
+                          fontSize: '13px',
                           fontWeight: 500,
                           transition: 'all 0.2s ease'
                         }}

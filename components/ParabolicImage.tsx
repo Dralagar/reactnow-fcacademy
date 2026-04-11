@@ -36,7 +36,7 @@ export default function ParabolicImage({
   const [imageError, setImageError] = useState(false);
 
   // Fallback for missing images
-  const imageSrc = imageError ? "/images/placeholder.jpg" : src;
+  const imageSrc = imageError ? "/images/reactnowlog.png" : src;
 
   return (
     <motion.div
