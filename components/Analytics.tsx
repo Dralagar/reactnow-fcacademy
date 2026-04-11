@@ -3,6 +3,20 @@
 import { useEffect } from "react";
 import Script from "next/script";
 
+// Add this type declaration
+declare global {
+  interface Window {
+    gtag: (
+      command: string,
+      target: string,
+      config?: {
+        page_path?: string;
+        [key: string]: any;
+      }
+    ) => void;
+  }
+}
+
 export default function Analytics() {
   useEffect(() => {
     // Page view tracking
