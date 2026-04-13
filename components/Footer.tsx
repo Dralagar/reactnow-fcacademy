@@ -165,7 +165,7 @@ const SOCIAL_LINKS: SocialLink[] = [
   { icon: "/images/Xlogo.png",           href: "https://x.com/reactnowfc?s=21",                       label: "X (Twitter)", gradient: "from-slate-600 to-slate-800"      },
   { icon: "/images/InstLOGO.jpeg",       href: "https://www.instagram.com/reactnowfc_academy?igsh=ODluamo4NGhhbHdl&utm_source=qr",                     label: "Instagram",   gradient: "from-[#e4405f] to-[#d81f3d]"      },
   { icon: "/images/LinkedInLogo.png",        href: "https://linkedin.com/company/reactnowfc",              label: "LinkedIn",    gradient: "from-[#0077b5] to-[#005582]"      },
-  { icon: "/images/facebooklogo.jpeg",   href: "https://facebook.com/reactnowfc",                      label: "Facebook",    gradient: "from-[#1877f2] to-[#0e5fc7]"      },
+  { icon: "/images/facebooklogo.png",   href: "https://facebook.com/reactnowfc",                      label: "Facebook",    gradient: "from-[#1877f2] to-[#0e5fc7]"      },
   { icon: "/images/mastadonLogo.png",    href: "https://mastodon.social/@reactnowfc",                  label: "Mastodon",    gradient: "from-[#6364ff] to-[#4a4ad6]"      },
   { icon: "/images/slack.png",           href: "https://join.slack.com/t/reactnowfc/shared_invite/xxx",label: "Slack",       gradient: "from-[#4A154B] to-[#36123b]"      },
 ];

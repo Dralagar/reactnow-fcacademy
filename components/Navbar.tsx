@@ -18,6 +18,11 @@ import {
   Phone,
   Users,
   X,
+  MapPin,
+  Mail,
+  Instagram,
+  Facebook,
+  Twitter,
 } from "lucide-react";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -25,7 +30,7 @@ import {
 // Fully responsive with mobile-first approach
 // ─────────────────────────────────────────────────────────────────────────────
 const SPOTLIGHT_IMAGES = [
-  "/images/Africankid.png",
+  "/images/Africankid.jpeg",
   "/images/Hero1.jpeg",
   "/images/Hero2.jpeg",
   "/images/Hero5.jpeg",
@@ -175,7 +180,120 @@ function SpotlightCarousel() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Component
+// Top Bar Component - Contact & Social Icons (appears above navbar when docked)
+// ─────────────────────────────────────────────────────────────────────────────
+function TopBar({ isVisible, isDocked }: { isVisible: boolean; isDocked: boolean }) {
+  return (
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 49,
+            background: isDocked ? "rgba(0,0,0,0.6)" : "#0f172a",
+            backdropFilter: "blur(12px)",
+            borderBottom: `1px solid ${isDocked ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.15)"}`,
+          }}
+        >
+          <div
+            style={{
+              maxWidth: 1440,
+              margin: "0 auto",
+              padding: "8px clamp(12px, 4vw, 24px)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+              gap: "12px",
+            }}
+          >
+            {/* Left side: Location & Contact */}
+            <div style={{ display: "flex", alignItems: "center", gap: "clamp(12px, 3vw, 24px)", flexWrap: "wrap" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "6px", color: isDocked ? "rgba(255,255,255,0.85)" : "#fff" }}>
+                <MapPin className="icon" style={{ width: "14px", height: "14px" }} />
+                <span style={{ fontSize: "clamp(11px, 2.5vw, 12px)" }}>Bee Centre, Embakasi, Nairobi</span>
+              </div>
+              <a
+                href="tel:+254706255611"
+                style={{ display: "flex", alignItems: "center", gap: "6px", color: isDocked ? "rgba(255,255,255,0.85)" : "#fff", textDecoration: "none", fontSize: "clamp(11px, 2.5vw, 12px)" }}
+              >
+                <Phone className="icon" style={{ width: "14px", height: "14px" }} />
+                <span>+254 706 255 611</span>
+              </a>
+              <a
+                href="mailto:info@reactnowfca.org"
+                style={{ display: "flex", alignItems: "center", gap: "6px", color: isDocked ? "rgba(255,255,255,0.85)" : "#fff", textDecoration: "none", fontSize: "clamp(11px, 2.5vw, 12px)" }}
+              >
+                <Mail className="icon" style={{ width: "14px", height: "14px" }} />
+                <span>info@reactnowfca.org</span>
+              </a>
+            </div>
+
+            {/* Right side: Social Icons */}
+            <div style={{ display: "flex", alignItems: "center", gap: "clamp(12px, 3vw, 16px)" }}>
+              <a
+                href="https://instagram.com/reactnowfc"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                style={{ color: isDocked ? "rgba(255,255,255,0.85)" : "#fff", transition: "color 0.2s ease" }}
+                onMouseEnter={(e) => e.currentTarget.style.color = "#e4405f"}
+                onMouseLeave={(e) => e.currentTarget.style.color = isDocked ? "rgba(255,255,255,0.85)" : "#fff"}
+              >
+                <Instagram className="icon" style={{ width: "16px", height: "16px" }} />
+              </a>
+              <a
+                href="https://facebook.com/reactnowfc"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                style={{ color: isDocked ? "rgba(255,255,255,0.85)" : "#fff", transition: "color 0.2s ease" }}
+                onMouseEnter={(e) => e.currentTarget.style.color = "#1877f2"}
+                onMouseLeave={(e) => e.currentTarget.style.color = isDocked ? "rgba(255,255,255,0.85)" : "#fff"}
+              >
+                <Facebook className="icon" style={{ width: "16px", height: "16px" }} />
+              </a>
+              <a
+                href="https://twitter.com/reactnowfc"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Twitter"
+                style={{ color: isDocked ? "rgba(255,255,255,0.85)" : "#fff", transition: "color 0.2s ease" }}
+                onMouseEnter={(e) => e.currentTarget.style.color = "#1da1f2"}
+                onMouseLeave={(e) => e.currentTarget.style.color = isDocked ? "rgba(255,255,255,0.85)" : "#fff"}
+              >
+                <Twitter className="icon" style={{ width: "16px", height: "16px" }} />
+              </a>
+              <a
+                href="https://tiktok.com/@reactnowfc"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="TikTok"
+                style={{ color: isDocked ? "rgba(255,255,255,0.85)" : "#fff", transition: "color 0.2s ease" }}
+                onMouseEnter={(e) => e.currentTarget.style.color = "#000000"}
+                onMouseLeave={(e) => e.currentTarget.style.color = isDocked ? "rgba(255,255,255,0.85)" : "#fff"}
+              >
+                <svg className="icon" style={{ width: "14px", height: "14px" }} fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.87-3.85 3.1 3.1 0 0 1 .46.04V9.9a6.48 6.48 0 0 0-1.28-.12 6.31 6.31 0 0 0-6.35 6.27 6.31 6.31 0 0 0 9.68 5.31 6.31 6.31 0 0 0 2.9-4.93V9.06a7.9 7.9 0 0 0 4.5 1.44V7.23a4.67 4.67 0 0 1-2.36-.54z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Main Component
 // ─────────────────────────────────────────────────────────────────────────────
 export default function Navbar() {
   const pathname   = usePathname();
@@ -248,8 +366,14 @@ export default function Navbar() {
     timeoutRef.current = setTimeout(() => setDesktopMenu(null), 150);
   };
 
+  // Show top bar only when docked (at bottom) and not scrolled
+  const showTopBar = isDocked;
+
   return (
     <>
+      {/* ── TOP BAR: Contact & Social Icons (above navbar) ── */}
+      <TopBar isVisible={showTopBar} isDocked={isDocked} />
+
       {/* ── SPOTLIGHT BAND (only visible while docked at bottom) ── */}
       <AnimatePresence>
         {isDocked && (
@@ -393,6 +517,8 @@ export default function Navbar() {
           y: yPos,
           width: navWidth,
           borderRadius: navRadius,
+          top: showTopBar ? "40px" : "0px",
+          transition: "top 0.3s ease",
         }}
       >
         <motion.div
@@ -622,7 +748,7 @@ export default function Navbar() {
               </nav>
             </div>
 
-            {/* ── Right side: Donate button only (social removed) ───────────── */}
+            {/* ── Right side: Donate button only ───────────────────────────── */}
             <div style={{ display: "flex", alignItems: "center", gap: "clamp(12px, 3vw, 16px)" }}>
               <Link
                 href="/join/donate"
@@ -725,6 +851,17 @@ export default function Navbar() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg> info@reactnowfca.org
                   </a>
+                  {/* Social Icons in Mobile Menu */}
+                  <div style={{ display: "flex", gap: "16px", paddingTop: "8px", borderTop: "1px solid #e2e8f0", marginTop: "4px" }}>
+                    <a href="https://instagram.com/reactnowfc" target="_blank" rel="noopener noreferrer" style={{ color: "#64748b" }}><Instagram className="icon" /></a>
+                    <a href="https://facebook.com/reactnowfc" target="_blank" rel="noopener noreferrer" style={{ color: "#64748b" }}><Facebook className="icon" /></a>
+                    <a href="https://twitter.com/reactnowfc" target="_blank" rel="noopener noreferrer" style={{ color: "#64748b" }}><Twitter className="icon" /></a>
+                    <a href="https://tiktok.com/@reactnowfc" target="_blank" rel="noopener noreferrer" style={{ color: "#64748b" }}>
+                      <svg className="icon" fill="currentColor" viewBox="0 0 24 24" style={{ width: "16px", height: "16px" }}>
+                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.87-3.85 3.1 3.1 0 0 1 .46.04V9.9a6.48 6.48 0 0 0-1.28-.12 6.31 6.31 0 0 0-6.35 6.27 6.31 6.31 0 0 0 9.68 5.31 6.31 6.31 0 0 0 2.9-4.93V9.06a7.9 7.9 0 0 0 4.5 1.44V7.23a4.67 4.67 0 0 1-2.36-.54z"/>
+                      </svg>
+                    </a>
+                  </div>
                 </div>
               </div>
 
