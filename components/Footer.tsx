@@ -8,6 +8,7 @@
  * ║    • Contact row  → flex flex-wrap gap-4 (flex-1 min-w-[200px] cards)  ║
  * ║    • Bottom bar quick-links → gap-x-6 gap-y-2 + whitespace-nowrap      ║
  * ║    • Social icons using string paths from /public/images/              ║
+ * ║    • Added WhatsApp contact for better accessibility                   ║
  * ╚══════════════════════════════════════════════════════════════════════════╝
  */
 
@@ -15,6 +16,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { MdEmail } from "react-icons/md";
+import { FaWhatsapp } from "react-icons/fa";
 import {
   MapPin,
   Phone,
@@ -437,6 +439,7 @@ export default function Footer() {
                       For inquiries, reach out to our Visionary & Strategic Lead — Founder of React Now Academy. 
                       <span className="text-primary-400 font-semibold"> We React Promptly.</span>
                     </p>
+                    {/* Regular Phone */}
                     <a
                       href="tel:+254706255611"
                       className="text-sm text-gray-300 hover:text-white transition-colors block mb-1 focus-ring rounded"
@@ -444,6 +447,18 @@ export default function Footer() {
                     >
                       +254 706 255 611
                     </a>
+                    {/* WhatsApp - Mobile friendly */}
+                    <a
+                      href="https://wa.me/254706255611"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-green-400 hover:text-green-300 transition-colors flex items-center gap-2 mb-1 focus-ring rounded"
+                      aria-label="Chat with us on WhatsApp at +254 706 255 611"
+                    >
+                      <FaWhatsapp className="text-lg" />
+                      +254 706 255 611 (WhatsApp)
+                    </a>
+                    {/* Email */}
                     <a
                       href="mailto:info@reactnowfca.org"
                       className="text-sm text-gray-300 hover:text-white transition-colors focus-ring rounded flex items-center gap-2"

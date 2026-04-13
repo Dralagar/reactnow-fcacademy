@@ -6,6 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { SITE_IMAGES } from "@/lib/site-images";
 import { AnimatePresence, motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { FaWhatsapp } from "react-icons/fa";
 import {
   BarChart3,
   ChevronDown,
@@ -20,14 +21,10 @@ import {
   X,
   MapPin,
   Mail,
-  Instagram,
-  Facebook,
-  Twitter,
 } from "lucide-react";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Hero background images - Professional, high-quality academy spotlight images
-// Fully responsive with mobile-first approach
+// Hero background images
 // ─────────────────────────────────────────────────────────────────────────────
 const SPOTLIGHT_IMAGES = [
   "/images/Africankid.jpeg",
@@ -89,6 +86,18 @@ const navigationItems: NavItem[] = [
   { name: "Contact",        href: "/contact",        icon: Phone },
 ];
 
+// ─────────────────────────────────────────────────────────────────────────────
+// SOCIAL LINKS - SAME AS FOOTER - Images directly in /public/images/
+// Using the exact same pattern that works in footer
+// ─────────────────────────────────────────────────────────────────────────────
+const SOCIAL_LINKS = [
+  { icon: "/images/Tiktok.jpeg",      href: "https://www.tiktok.com/@react_now.fc.academy",           label: "TikTok" },
+  { icon: "/images/Xlogo.png",        href: "https://x.com/reactnowfc",                               label: "X (Twitter)" },
+  { icon: "/images/InstLOGO.jpeg",    href: "https://www.instagram.com/reactnowfc_academy",          label: "Instagram" },
+  { icon: "/images/LinkedInLogo.png", href: "https://linkedin.com/company/reactnowfc",               label: "LinkedIn" },
+  { icon: "/images/facebooklogo.png", href: "https://facebook.com/reactnowfc",                       label: "Facebook" },
+];
+
 function isActivePath(pathname: string, href: string) {
   if (href === "/") return pathname === "/";
   return pathname === href || pathname.startsWith(`${href}/`);
@@ -99,8 +108,7 @@ function hasActiveSubmenu(pathname: string, item: NavItem) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Spotlight carousel — auto-advances every 4 s, cross-fades
-// Fully responsive with mobile-optimized image positioning
+// Spotlight carousel
 // ─────────────────────────────────────────────────────────────────────────────
 function SpotlightCarousel() {
   const [idx, setIdx] = useState(0);
@@ -127,25 +135,19 @@ function SpotlightCarousel() {
             alt={`React Now FC spotlight ${i + 1}`}
             fill
             sizes="100vw"
-            style={{ 
-              objectFit: "cover", 
-              objectPosition: "center 20%",
-              transform: "scale(1)",
-            }}
+            style={{ objectFit: "cover", objectPosition: "center 20%" }}
             priority={i === 0}
             quality={85}
           />
         </div>
       ))}
-      {/* Enhanced dark overlay for better text readability - responsive */}
       <div
         style={{
           position: "absolute",
           inset: 0,
-          background: "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.85) 100%)",
+          background: "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.75) 100%)",
         }}
       />
-      {/* Dot indicators - mobile friendly */}
       <div
         style={{
           position: "absolute",
@@ -181,114 +183,104 @@ function SpotlightCarousel() {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Top Bar Component - Contact & Social Icons (appears above navbar when docked)
+// Using same Image pattern as footer for social icons
 // ─────────────────────────────────────────────────────────────────────────────
 function TopBar({ isVisible, isDocked }: { isVisible: boolean; isDocked: boolean }) {
-  return (
-    <AnimatePresence>
-      {isVisible && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            zIndex: 49,
-            background: isDocked ? "rgba(0,0,0,0.6)" : "#0f172a",
-            backdropFilter: "blur(12px)",
-            borderBottom: `1px solid ${isDocked ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.15)"}`,
-          }}
-        >
-          <div
-            style={{
-              maxWidth: 1440,
-              margin: "0 auto",
-              padding: "8px clamp(12px, 4vw, 24px)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              flexWrap: "wrap",
-              gap: "12px",
-            }}
-          >
-            {/* Left side: Location & Contact */}
-            <div style={{ display: "flex", alignItems: "center", gap: "clamp(12px, 3vw, 24px)", flexWrap: "wrap" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "6px", color: isDocked ? "rgba(255,255,255,0.85)" : "#fff" }}>
-                <MapPin className="icon" style={{ width: "14px", height: "14px" }} />
-                <span style={{ fontSize: "clamp(11px, 2.5vw, 12px)" }}>Bee Centre, Embakasi, Nairobi</span>
-              </div>
-              <a
-                href="tel:+254706255611"
-                style={{ display: "flex", alignItems: "center", gap: "6px", color: isDocked ? "rgba(255,255,255,0.85)" : "#fff", textDecoration: "none", fontSize: "clamp(11px, 2.5vw, 12px)" }}
-              >
-                <Phone className="icon" style={{ width: "14px", height: "14px" }} />
-                <span>+254 706 255 611</span>
-              </a>
-              <a
-                href="mailto:info@reactnowfca.org"
-                style={{ display: "flex", alignItems: "center", gap: "6px", color: isDocked ? "rgba(255,255,255,0.85)" : "#fff", textDecoration: "none", fontSize: "clamp(11px, 2.5vw, 12px)" }}
-              >
-                <Mail className="icon" style={{ width: "14px", height: "14px" }} />
-                <span>info@reactnowfca.org</span>
-              </a>
-            </div>
+  if (!isVisible) return null;
 
-            {/* Right side: Social Icons */}
-            <div style={{ display: "flex", alignItems: "center", gap: "clamp(12px, 3vw, 16px)" }}>
-              <a
-                href="https://instagram.com/reactnowfc"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                style={{ color: isDocked ? "rgba(255,255,255,0.85)" : "#fff", transition: "color 0.2s ease" }}
-                onMouseEnter={(e) => e.currentTarget.style.color = "#e4405f"}
-                onMouseLeave={(e) => e.currentTarget.style.color = isDocked ? "rgba(255,255,255,0.85)" : "#fff"}
-              >
-                <Instagram className="icon" style={{ width: "16px", height: "16px" }} />
-              </a>
-              <a
-                href="https://facebook.com/reactnowfc"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Facebook"
-                style={{ color: isDocked ? "rgba(255,255,255,0.85)" : "#fff", transition: "color 0.2s ease" }}
-                onMouseEnter={(e) => e.currentTarget.style.color = "#1877f2"}
-                onMouseLeave={(e) => e.currentTarget.style.color = isDocked ? "rgba(255,255,255,0.85)" : "#fff"}
-              >
-                <Facebook className="icon" style={{ width: "16px", height: "16px" }} />
-              </a>
-              <a
-                href="https://twitter.com/reactnowfc"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Twitter"
-                style={{ color: isDocked ? "rgba(255,255,255,0.85)" : "#fff", transition: "color 0.2s ease" }}
-                onMouseEnter={(e) => e.currentTarget.style.color = "#1da1f2"}
-                onMouseLeave={(e) => e.currentTarget.style.color = isDocked ? "rgba(255,255,255,0.85)" : "#fff"}
-              >
-                <Twitter className="icon" style={{ width: "16px", height: "16px" }} />
-              </a>
-              <a
-                href="https://tiktok.com/@reactnowfc"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="TikTok"
-                style={{ color: isDocked ? "rgba(255,255,255,0.85)" : "#fff", transition: "color 0.2s ease" }}
-                onMouseEnter={(e) => e.currentTarget.style.color = "#000000"}
-                onMouseLeave={(e) => e.currentTarget.style.color = isDocked ? "rgba(255,255,255,0.85)" : "#fff"}
-              >
-                <svg className="icon" style={{ width: "14px", height: "14px" }} fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.87-3.85 3.1 3.1 0 0 1 .46.04V9.9a6.48 6.48 0 0 0-1.28-.12 6.31 6.31 0 0 0-6.35 6.27 6.31 6.31 0 0 0 9.68 5.31 6.31 6.31 0 0 0 2.9-4.93V9.06a7.9 7.9 0 0 0 4.5 1.44V7.23a4.67 4.67 0 0 1-2.36-.54z"/>
-                </svg>
-              </a>
-            </div>
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 49,
+        background: isDocked ? "rgba(0,0,0,0.7)" : "#0f172a",
+        backdropFilter: "blur(12px)",
+        borderBottom: `1px solid ${isDocked ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.15)"}`,
+      }}
+    >
+      <div
+        style={{
+          maxWidth: 1440,
+          margin: "0 auto",
+          padding: "6px clamp(12px, 4vw, 24px)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: "8px",
+        }}
+      >
+        {/* Left side: Location & Contact */}
+        <div style={{ display: "flex", alignItems: "center", gap: "clamp(12px, 2vw, 20px)", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px", color: isDocked ? "rgba(255,255,255,0.85)" : "#fff" }}>
+            <MapPin style={{ width: "12px", height: "12px" }} />
+            <span style={{ fontSize: "clamp(10px, 2vw, 12px)" }}>Embakasi, Nairobi</span>
           </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+          <a
+            href="tel:+254706255611"
+            style={{ display: "flex", alignItems: "center", gap: "6px", color: isDocked ? "rgba(255,255,255,0.85)" : "#fff", textDecoration: "none", fontSize: "clamp(10px, 2vw, 12px)" }}
+          >
+            <Phone style={{ width: "12px", height: "12px" }} />
+            <span>+254 706 255 611</span>
+          </a>
+          <a
+            href="https://wa.me/254706255611"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: "flex", alignItems: "center", gap: "6px", color: "#25D366", textDecoration: "none", fontSize: "clamp(10px, 2vw, 12px)" }}
+          >
+            <FaWhatsapp style={{ width: "12px", height: "12px" }} />
+            <span>WhatsApp</span>
+          </a>
+          <a
+            href="mailto:info@reactnowfca.org"
+            style={{ display: "flex", alignItems: "center", gap: "6px", color: isDocked ? "rgba(255,255,255,0.85)" : "#fff", textDecoration: "none", fontSize: "clamp(10px, 2vw, 12px)" }}
+          >
+            <Mail style={{ width: "12px", height: "12px" }} />
+            <span>info@reactnowfca.org</span>
+          </a>
+        </div>
+
+        {/* Right side: Social Icons - SAME PATTERN AS FOOTER */}
+        <div style={{ display: "flex", alignItems: "center", gap: "clamp(10px, 2vw, 14px)" }}>
+          {SOCIAL_LINKS.map((social) => (
+            <a
+              key={social.label}
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={social.label}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "24px",
+                height: "24px",
+                transition: "transform 0.2s ease",
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.1)"}
+              onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
+            >
+              <Image 
+                src={social.icon} 
+                alt={social.label} 
+                width={20} 
+                height={20} 
+                className="object-contain"
+                style={{ filter: isDocked ? "brightness(0) invert(1)" : "none" }}
+              />
+            </a>
+          ))}
+        </div>
+      </div>
+    </motion.div>
   );
 }
 
@@ -305,16 +297,16 @@ export default function Navbar() {
   const [mobileMenu,  setMobileMenu]  = useState<string | null>(null);
   const [scrolled,    setScrolled]    = useState(false);
 
-  const DOCK_THRESHOLD = 80;
+  const DOCK_THRESHOLD = 100;
 
   const { scrollY } = useScroll();
   const rawProgress = useTransform(scrollY, [0, DOCK_THRESHOLD], [0, 1]);
   const progress = useSpring(rawProgress, { stiffness: 220, damping: 28, mass: 0.6 });
-  const yPos = useTransform(progress, [0, 1], ["calc(100vh - 112px)", "0px"]);
+  const yPos = useTransform(progress, [0, 1], ["calc(100vh - 100px)", "0px"]);
   const navWidth  = useTransform(progress, [0, 1], ["100%", "100%"]);
   const navRadius = useTransform(progress, [0, 1], ["0px", "0px"]);
   const bgOpacity = useTransform(progress, [0, 1], [0, 1]);
-  const logoScale = useTransform(progress, [0, 1], [1.18, 1]);
+  const logoScale = useTransform(progress, [0, 1], [1.15, 1]);
 
   const [isDocked, setIsDocked] = useState(true);
   useEffect(() => {
@@ -366,17 +358,16 @@ export default function Navbar() {
     timeoutRef.current = setTimeout(() => setDesktopMenu(null), 150);
   };
 
-  // Show top bar only when docked (at bottom) and not scrolled
-  const showTopBar = isDocked;
+  const showTopBar = isDocked && !scrolled;
+  const navbarTopOffset = showTopBar ? "40px" : "0px";
 
   return (
     <>
-      {/* ── TOP BAR: Contact & Social Icons (above navbar) ── */}
       <TopBar isVisible={showTopBar} isDocked={isDocked} />
 
-      {/* ── SPOTLIGHT BAND (only visible while docked at bottom) ── */}
+      {/* SPOTLIGHT BAND - only visible when docked and not scrolled */}
       <AnimatePresence>
-        {isDocked && (
+        {isDocked && !scrolled && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -390,7 +381,6 @@ export default function Navbar() {
             }}
           >
             <SpotlightCarousel />
-            {/* Academy tagline centred over the image - fully responsive */}
             <div
               style={{
                 position: "absolute",
@@ -406,7 +396,6 @@ export default function Navbar() {
                 padding: "clamp(16px, 5vw, 32px)",
               }}
             >
-              {/* Nairobi, Kenya - Professional styling */}
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -429,7 +418,6 @@ export default function Navbar() {
                   letterSpacing: "0.15em",
                   textTransform: "uppercase",
                   fontWeight: 500,
-                  color: "rgba(255,255,255,0.95)",
                 }}>
                   NAIROBI, KENYA
                 </span>
@@ -463,50 +451,16 @@ export default function Navbar() {
                   maxWidth: "550px",
                   margin: "0 auto",
                   lineHeight: 1.5,
-                  fontWeight: 400,
                 }}
               >
                 Grassroots football, education &amp; mentorship — building champions &amp; futures.
               </motion.p>
-
-              {/* Scroll hint - responsive */}
-              <motion.div
-                animate={{ y: [0, 10, 0] }}
-                transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-                style={{ 
-                  marginTop: "clamp(30px, 8vh, 50px)", 
-                  display: "flex", 
-                  justifyContent: "center" 
-                }}
-              >
-                <div
-                  style={{
-                    width: "clamp(26px, 6vw, 32px)",
-                    height: "clamp(40px, 8vw, 52px)",
-                    border: "2px solid rgba(255,255,255,0.5)",
-                    borderRadius: "clamp(14px, 4vw, 20px)",
-                    display: "flex",
-                    alignItems: "flex-start",
-                    justifyContent: "center",
-                    paddingTop: "clamp(8px, 2vw, 12px)",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: "3px",
-                      height: "clamp(8px, 2vw, 12px)",
-                      background: "rgba(255,255,255,0.8)",
-                      borderRadius: "2px",
-                    }}
-                  />
-                </div>
-              </motion.div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* ── NAVBAR ─────────────────────────────────────────────────────────── */}
+      {/* NAVBAR */}
       <motion.header
         ref={navRef as React.RefObject<HTMLDivElement>}
         style={{
@@ -517,7 +471,7 @@ export default function Navbar() {
           y: yPos,
           width: navWidth,
           borderRadius: navRadius,
-          top: showTopBar ? "40px" : "0px",
+          top: navbarTopOffset,
           transition: "top 0.3s ease",
         }}
       >
@@ -529,7 +483,6 @@ export default function Navbar() {
             opacity: bgOpacity,
             borderBottom: "1px solid rgba(226,232,240,0.8)",
             boxShadow: scrolled ? "0 4px 20px rgba(0,0,0,0.08)" : "none",
-            transition: "box-shadow 0.3s ease",
           }}
         />
         <motion.div
@@ -538,7 +491,6 @@ export default function Navbar() {
             inset: 0,
             background: "rgba(0,0,0,0.5)",
             backdropFilter: "blur(16px)",
-            WebkitBackdropFilter: "blur(16px)",
             opacity: useTransform(progress, [0, 0.4], [1, 0]),
             borderTop: "1px solid rgba(255,255,255,0.15)",
           }}
@@ -549,14 +501,14 @@ export default function Navbar() {
             maxWidth: 1440,
             margin: "0 auto",
             padding: "0 clamp(12px, 4vw, 24px)",
-            height: scrolled ? "clamp(60px, 12vh, 76px)" : "clamp(70px, 15vh, 88px)",
+            height: scrolled ? "clamp(56px, 10vh, 70px)" : "clamp(64px, 12vh, 80px)",
             transition: "height 0.3s ease",
             position: "relative",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "100%" }}>
 
-            {/* ── Logo - Responsive ───────────────────────────────────────── */}
+            {/* Logo */}
             <Link
               href="/"
               aria-label="React Now FC Academy home"
@@ -566,7 +518,6 @@ export default function Navbar() {
                 gap: "clamp(8px, 2vw, 12px)",
                 textDecoration: "none",
                 color: "inherit",
-                WebkitTapHighlightColor: "transparent",
               }}
               onClick={() => mobileOpen && setMobileOpen(false)}
             >
@@ -575,9 +526,8 @@ export default function Navbar() {
                   position: "relative",
                   flexShrink: 0,
                   scale: logoScale,
-                  width:  scrolled ? "clamp(44px, 10vw, 60px)" : "clamp(52px, 12vw, 76px)",
-                  height: scrolled ? "clamp(44px, 10vw, 60px)" : "clamp(52px, 12vw, 76px)",
-                  transition: "width 0.3s ease, height 0.3s ease",
+                  width:  scrolled ? "clamp(40px, 8vw, 50px)" : "clamp(48px, 10vw, 65px)",
+                  height: scrolled ? "clamp(40px, 8vw, 50px)" : "clamp(48px, 10vw, 65px)",
                 }}
               >
                 <Image
@@ -593,9 +543,8 @@ export default function Navbar() {
                 <div
                   style={{
                     fontWeight: 700,
-                    fontSize: scrolled ? "clamp(13px, 3vw, 15px)" : "clamp(14px, 3.5vw, 17px)",
-                    transition: "font-size 0.3s ease",
-                    color: isDocked ? "#fff" : "#0f172a",
+                    fontSize: scrolled ? "clamp(12px, 2.5vw, 14px)" : "clamp(13px, 3vw, 16px)",
+                    color: isDocked && !scrolled ? "#fff" : "#0f172a",
                     lineHeight: 1.2,
                     whiteSpace: "nowrap",
                   }}
@@ -604,12 +553,10 @@ export default function Navbar() {
                 </div>
                 <div
                   style={{
-                    fontSize: scrolled ? "clamp(8px, 2vw, 10px)" : "clamp(9px, 2.2vw, 11px)",
-                    color: isDocked ? "rgba(255,255,255,0.7)" : "#64748b",
+                    fontSize: scrolled ? "clamp(8px, 1.8vw, 9px)" : "clamp(8px, 2vw, 10px)",
+                    color: isDocked && !scrolled ? "rgba(255,255,255,0.7)" : "#64748b",
                     letterSpacing: "0.12em",
                     textTransform: "uppercase",
-                    lineHeight: 1.2,
-                    transition: "color 0.3s ease",
                     whiteSpace: "nowrap",
                   }}
                 >
@@ -618,13 +565,14 @@ export default function Navbar() {
               </div>
             </Link>
 
-            {/* ── Desktop nav ───────────────────────────────────────────────── */}
+            {/* Desktop nav */}
             <div className="desktop-nav">
               <nav aria-label="Desktop navigation">
                 <div style={{ display: "flex", gap: "clamp(2px, 1vw, 4px)", alignItems: "center" }}>
                   {navigationItems.map((item) => {
                     const Icon  = item.icon;
                     const active = isActivePath(pathname, item.href) || hasActiveSubmenu(pathname, item);
+                    const isDarkMode = isDocked && !scrolled;
 
                     if (item.submenu) {
                       const isOpen = desktopMenu === item.name;
@@ -638,28 +586,24 @@ export default function Navbar() {
                           <button
                             type="button"
                             aria-expanded={isOpen}
-                            aria-haspopup="menu"
                             onClick={() => setDesktopMenu((p) => (p === item.name ? null : item.name))}
                             style={{
                               display: "inline-flex",
                               alignItems: "center",
                               gap: "clamp(4px, 1.5vw, 6px)",
                               padding: "clamp(5px, 1.5vw, 7px) clamp(8px, 2vw, 12px)",
-                              background: active
-                                ? isDocked ? "rgba(255,255,255,0.18)" : "#0f172a"
-                                : "transparent",
-                              color: isDocked ? "#fff" : active ? "#fff" : "#334155",
+                              background: active && !isDarkMode ? "#0f172a" : active && isDarkMode ? "rgba(255,255,255,0.18)" : "transparent",
+                              color: isDarkMode ? "#fff" : active ? "#fff" : "#334155",
                               border: "none",
                               borderRadius: "clamp(8px, 2vw, 10px)",
                               cursor: "pointer",
                               fontSize: "clamp(11px, 2vw, 13px)",
                               fontWeight: 500,
-                              transition: "all 0.2s ease",
                             }}
                           >
-                            <Icon className="icon" />
+                            <Icon style={{ width: "14px", height: "14px" }} />
                             <span>{item.name}</span>
-                            <ChevronDown className={`icon ${isOpen ? "rotated" : ""}`} />
+                            <ChevronDown style={{ width: "12px", height: "12px", transform: isOpen ? "rotate(180deg)" : "none" }} />
                           </button>
 
                           <AnimatePresence>
@@ -679,7 +623,7 @@ export default function Navbar() {
                                   border: "1px solid #e2e8f0",
                                   borderRadius: 14,
                                   padding: 6,
-                                  boxShadow: "0 20px 25px -5px rgba(0,0,0,0.1),0 10px 10px -5px rgba(0,0,0,0.04)",
+                                  boxShadow: "0 20px 25px -5px rgba(0,0,0,0.1)",
                                 }}
                                 role="menu"
                               >
@@ -697,14 +641,13 @@ export default function Navbar() {
                                           color: subActive ? "#fff" : "#0f172a",
                                           borderRadius: 10,
                                           textDecoration: "none",
-                                          transition: "background 0.2s",
                                         }}
                                         role="menuitem"
                                         onClick={() => setDesktopMenu(null)}
                                       >
                                         <div style={{ fontSize: 13, fontWeight: 500 }}>{sub.name}</div>
                                         {sub.description && (
-                                          <div style={{ fontSize: 12, marginTop: 4, color: subActive ? "#e2e8f0" : "#64748b", lineHeight: 1.4 }}>
+                                          <div style={{ fontSize: 12, marginTop: 4, color: subActive ? "#e2e8f0" : "#64748b" }}>
                                             {sub.description}
                                           </div>
                                         )}
@@ -728,18 +671,15 @@ export default function Navbar() {
                           alignItems: "center",
                           gap: "clamp(4px, 1.5vw, 6px)",
                           padding: "clamp(5px, 1.5vw, 7px) clamp(8px, 2vw, 12px)",
-                          background: active
-                            ? isDocked ? "rgba(255,255,255,0.18)" : "#0f172a"
-                            : "transparent",
-                          color: isDocked ? "#fff" : active ? "#fff" : "#334155",
+                          background: active && !isDarkMode ? "#0f172a" : active && isDarkMode ? "rgba(255,255,255,0.18)" : "transparent",
+                          color: isDarkMode ? "#fff" : active ? "#fff" : "#334155",
                           borderRadius: "clamp(8px, 2vw, 10px)",
                           textDecoration: "none",
                           fontSize: "clamp(11px, 2vw, 13px)",
                           fontWeight: 500,
-                          transition: "all 0.2s ease",
                         }}
                       >
-                        <Icon className="icon" />
+                        <Icon style={{ width: "14px", height: "14px" }} />
                         <span>{item.name}</span>
                       </Link>
                     );
@@ -748,7 +688,7 @@ export default function Navbar() {
               </nav>
             </div>
 
-            {/* ── Right side: Donate button only ───────────────────────────── */}
+            {/* Right side: Donate button */}
             <div style={{ display: "flex", alignItems: "center", gap: "clamp(12px, 3vw, 16px)" }}>
               <Link
                 href="/join/donate"
@@ -758,19 +698,16 @@ export default function Navbar() {
                   alignItems: "center",
                   gap: "clamp(6px, 1.5vw, 8px)",
                   padding: "clamp(6px, 1.5vw, 8px) clamp(16px, 4vw, 20px)",
-                  background: isDocked ? "rgba(255,255,255,0.95)" : "#0284c7",
-                  color: isDocked ? "#0f172a" : "#fff",
+                  background: isDocked && !scrolled ? "rgba(255,255,255,0.95)" : "#0284c7",
+                  color: isDocked && !scrolled ? "#0f172a" : "#fff",
                   borderRadius: "40px",
                   textDecoration: "none",
                   fontSize: "clamp(12px, 2.5vw, 13px)",
                   fontWeight: 600,
-                  transition: "all 0.3s ease",
-                  border: isDocked ? "none" : "none",
-                  boxShadow: isDocked ? "0 2px 8px rgba(0,0,0,0.1)" : "none",
                   whiteSpace: "nowrap",
                 }}
               >
-                <Heart className="icon" />
+                <Heart style={{ width: "14px", height: "14px" }} />
                 <span>Support</span>
               </Link>
 
@@ -779,35 +716,28 @@ export default function Navbar() {
                 onClick={() => { setMobileOpen((o) => !o); if (mobileOpen) setMobileMenu(null); }}
                 aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
                 aria-expanded={mobileOpen}
-                aria-controls="mobile-navigation"
                 className="mobile-menu-button"
                 style={{
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  width: "clamp(40px, 10vw, 44px)",
-                  height: "clamp(40px, 10vw, 44px)",
-                  background: mobileOpen
-                    ? "#f1f5f9"
-                    : isDocked ? "rgba(255,255,255,0.15)" : "#fff",
-                  border: mobileOpen
-                    ? "2px solid #0f172a"
-                    : isDocked ? "1px solid rgba(255,255,255,0.3)" : "1px solid #e2e8f0",
+                  width: "clamp(38px, 9vw, 42px)",
+                  height: "clamp(38px, 9vw, 42px)",
+                  background: mobileOpen ? "#f1f5f9" : isDocked && !scrolled ? "rgba(255,255,255,0.15)" : "#fff",
+                  border: mobileOpen ? "2px solid #0f172a" : isDocked && !scrolled ? "1px solid rgba(255,255,255,0.3)" : "1px solid #e2e8f0",
                   borderRadius: "clamp(10px, 2.5vw, 12px)",
                   cursor: "pointer",
-                  transition: "all 0.2s ease",
-                  color: mobileOpen ? "#0f172a" : isDocked ? "#fff" : "#334155",
-                  WebkitTapHighlightColor: "transparent",
+                  color: mobileOpen ? "#0f172a" : isDocked && !scrolled ? "#fff" : "#334155",
                 }}
               >
-                {mobileOpen ? <X className="icon icon-large" /> : <Menu className="icon icon-large" />}
+                {mobileOpen ? <X style={{ width: "18px", height: "18px" }} /> : <Menu style={{ width: "18px", height: "18px" }} />}
               </button>
             </div>
           </div>
         </div>
       </motion.header>
 
-      {/* ── MOBILE MENU ─────────────────────────────────────────────────────── */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -818,7 +748,7 @@ export default function Navbar() {
             transition={{ duration: 0.25, ease: "easeInOut" }}
             style={{
               position: "fixed",
-              top: scrolled ? "clamp(60px, 12vh, 76px)" : "clamp(70px, 15vh, 88px)",
+              top: scrolled ? "clamp(56px, 10vh, 70px)" : "clamp(64px, 12vh, 80px)",
               left: 0,
               right: 0,
               bottom: 0,
@@ -830,7 +760,7 @@ export default function Navbar() {
             }}
           >
             <div style={{ padding: "clamp(12px, 4vw, 16px)", minHeight: "100%", display: "flex", flexDirection: "column" }}>
-              {/* Mobile Contact Info Card - Clean & Professional */}
+              {/* Mobile Contact Info Card */}
               <div style={{ 
                 backgroundColor: "#fff", 
                 borderRadius: "clamp(16px, 4vw, 20px)", 
@@ -840,31 +770,37 @@ export default function Navbar() {
               }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: "clamp(10px, 2.5vw, 12px)" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "clamp(13px, 3.5vw, 14px)", color: "#334155" }}>
-                    <span style={{ fontSize: "16px" }}>📍</span> 
+                    <MapPin style={{ width: "16px", height: "16px" }} /> 
                     <span>Bee Centre Bar — Nasra Gardens Estate, Embakasi Central, Nairobi, Kenya</span>
                   </div>
                   <a href="tel:+254706255611" style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "clamp(13px, 3.5vw, 14px)", color: "#0284c7", textDecoration: "none" }}>
-                    <Phone className="icon" style={{ width: "16px", height: "16px" }} /> +254 706 255 611
+                    <Phone style={{ width: "16px", height: "16px" }} /> +254 706 255 611
+                  </a>
+                  <a href="https://wa.me/254706255611" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "clamp(13px, 3.5vw, 14px)", color: "#25D366", textDecoration: "none" }}>
+                    <FaWhatsapp style={{ width: "16px", height: "16px" }} /> WhatsApp: +254 706 255 611
                   </a>
                   <a href="mailto:info@reactnowfca.org" style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "clamp(13px, 3.5vw, 14px)", color: "#0284c7", textDecoration: "none" }}>
-                    <svg className="icon" style={{ width: "16px", height: "16px" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg> info@reactnowfca.org
+                    <Mail style={{ width: "16px", height: "16px" }} /> info@reactnowfca.org
                   </a>
-                  {/* Social Icons in Mobile Menu */}
-                  <div style={{ display: "flex", gap: "16px", paddingTop: "8px", borderTop: "1px solid #e2e8f0", marginTop: "4px" }}>
-                    <a href="https://instagram.com/reactnowfc" target="_blank" rel="noopener noreferrer" style={{ color: "#64748b" }}><Instagram className="icon" /></a>
-                    <a href="https://facebook.com/reactnowfc" target="_blank" rel="noopener noreferrer" style={{ color: "#64748b" }}><Facebook className="icon" /></a>
-                    <a href="https://twitter.com/reactnowfc" target="_blank" rel="noopener noreferrer" style={{ color: "#64748b" }}><Twitter className="icon" /></a>
-                    <a href="https://tiktok.com/@reactnowfc" target="_blank" rel="noopener noreferrer" style={{ color: "#64748b" }}>
-                      <svg className="icon" fill="currentColor" viewBox="0 0 24 24" style={{ width: "16px", height: "16px" }}>
-                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.87-3.85 3.1 3.1 0 0 1 .46.04V9.9a6.48 6.48 0 0 0-1.28-.12 6.31 6.31 0 0 0-6.35 6.27 6.31 6.31 0 0 0 9.68 5.31 6.31 6.31 0 0 0 2.9-4.93V9.06a7.9 7.9 0 0 0 4.5 1.44V7.23a4.67 4.67 0 0 1-2.36-.54z"/>
-                      </svg>
-                    </a>
+                  {/* Social Icons in Mobile Menu - SAME PATTERN AS FOOTER */}
+                  <div style={{ display: "flex", gap: "16px", paddingTop: "8px", borderTop: "1px solid #e2e8f0", marginTop: "4px", flexWrap: "wrap" }}>
+                    {SOCIAL_LINKS.map((social) => (
+                      <a
+                        key={social.label}
+                        href={social.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={social.label}
+                        style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "28px", height: "28px" }}
+                      >
+                        <Image src={social.icon} alt={social.label} width={24} height={24} className="object-contain" />
+                      </a>
+                    ))}
                   </div>
                 </div>
               </div>
 
+              {/* Navigation Items */}
               <div style={{ backgroundColor: "#fff", borderRadius: "clamp(16px, 4vw, 20px)", padding: "clamp(6px, 2vw, 8px)", boxShadow: "0 4px 12px rgba(0,0,0,0.05)", flex: 1 }}>
                 <nav style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                   {navigationItems.map((item) => {
@@ -901,7 +837,7 @@ export default function Navbar() {
                             }}
                             onClick={() => { if (!hasSubmenu) setMobileOpen(false); }}
                           >
-                            <Icon className="icon icon-mobile" />
+                            <Icon style={{ width: "20px", height: "20px" }} />
                             <span>{item.name}</span>
                             {active && !hasSubmenu && (
                               <span style={{ marginLeft: "auto", fontSize: 8, color: "#0284c7" }}>●</span>
@@ -924,7 +860,7 @@ export default function Navbar() {
                               }}
                               aria-label={isOpen ? `Close ${item.name} menu` : `Open ${item.name} menu`}
                             >
-                              <ChevronDown className={`icon icon-mobile ${isOpen ? "rotated" : ""}`} />
+                              <ChevronDown style={{ width: "20px", height: "20px", transform: isOpen ? "rotate(180deg)" : "none" }} />
                             </button>
                           )}
                         </div>
@@ -1011,7 +947,7 @@ export default function Navbar() {
                   }}
                   onClick={() => setMobileOpen(false)}
                 >
-                  <Heart className="icon icon-mobile" />
+                  <Heart style={{ width: "20px", height: "20px" }} />
                   <span>Support Our Academy</span>
                 </Link>
               </div>
@@ -1021,31 +957,16 @@ export default function Navbar() {
         )}
       </AnimatePresence>
 
-      {/* ── GLOBAL STYLES ──────────────────────────────────────────────────── */}
+      {/* Global Styles */}
       <style jsx global>{`
-        .icon { width: 16px; height: 16px; transition: transform 0.2s ease; }
-        .icon-large  { width: 20px; height: 20px; }
-        .icon-mobile { width: 20px; height: 20px; }
-
-        @media (max-width: 480px) {
-          .icon { width: 14px; height: 14px; }
-          .icon-large { width: 18px; height: 18px; }
-          .icon-mobile { width: 18px; height: 18px; }
-        }
-
-        .rotated { transform: rotate(180deg); }
-
-        /* Desktop styles */
         @media (min-width: 1024px) {
-          .desktop-nav    { display: flex !important; flex: 1; justify-content: center; }
+          .desktop-nav { display: flex !important; flex: 1; justify-content: center; }
           .desktop-donate { display: inline-flex !important; }
           .mobile-menu-button { display: none !important; }
-          #mobile-navigation  { display: none !important; }
+          #mobile-navigation { display: none !important; }
         }
-
-        /* Tablet and mobile styles */
         @media (max-width: 1023px) {
-          .desktop-nav    { display: none !important; }
+          .desktop-nav { display: none !important; }
           .desktop-donate { display: none !important; }
           .mobile-menu-button { display: flex !important; }
           #mobile-navigation {
@@ -1053,21 +974,16 @@ export default function Navbar() {
             scrollbar-width: thin;
             scrollbar-color: #cbd5e1 #f1f5f9;
           }
-          #mobile-navigation::-webkit-scrollbar       { width: 4px; }
+          #mobile-navigation::-webkit-scrollbar { width: 4px; }
           #mobile-navigation::-webkit-scrollbar-track { background: #f1f5f9; }
           #mobile-navigation::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
         }
-
-        /* Small mobile adjustments */
         @media (max-width: 380px) {
-          .icon-mobile { width: 18px; height: 18px; }
           #mobile-navigation a { padding: 10px 12px !important; min-height: 44px !important; }
         }
-
-        /* Safe area support for notched devices */
         @supports (padding: max(0px)) {
           #mobile-navigation {
-            padding-left:  env(safe-area-inset-left);
+            padding-left: env(safe-area-inset-left);
             padding-right: env(safe-area-inset-right);
           }
         }
