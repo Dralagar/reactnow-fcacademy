@@ -27,7 +27,7 @@ import {
 // Hero background images
 // ─────────────────────────────────────────────────────────────────────────────
 const SPOTLIGHT_IMAGES = [
-  "/images/Africankid.jpeg",
+  "/images/Africankid.png",
   "/images/Hero1.jpeg",
   "/images/Hero2.jpeg",
   "/images/Hero5.jpeg",
