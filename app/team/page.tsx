@@ -8,7 +8,7 @@ export default function TeamPage() {
       <SitePageHero
         title="Meet the Team"
         subtitle="The people who show up early, stay late, and believe in young people before they believe in themselves."
-        imageSrc="/images/Hero1.jpeg"
+        imageSrc="/images/Hero5.jpeg"
         imageAlt="React Now FC squad and coaches"
       />
       <section className="section">
@@ -47,7 +47,7 @@ export default function TeamPage() {
               </div>
               <div className="relative aspect-square overflow-hidden rounded-2xl border border-border shadow-md">
                 <Image
-                  src="/testimonials/george-dralagar.jpg"
+                  src="/images/Hero1.jpeg"
                   alt="Founder George Dralagar"
                   fill
                   className="object-cover"

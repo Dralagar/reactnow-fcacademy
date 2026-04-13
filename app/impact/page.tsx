@@ -2,8 +2,8 @@ import Link from "next/link";
 import SitePageHero from "@/components/SitePageHero";
 
 const stats = [
-  { value: "50+", label: "Youth players engaged" },
-  { value: "12", label: "Countries represented" },
+  { value: "15+", label: "Youth players engaged" },
+  { value: "5", label: "Countries represented" },
   { value: "100%", label: "Free to participate" },
   { value: "95%", label: "Parent satisfaction (goal)" },
 ];

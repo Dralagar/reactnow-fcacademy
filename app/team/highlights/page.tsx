@@ -10,13 +10,13 @@ const spotlights = [
   },
   {
     title: "Rising Star",
-    name: "Sarah Akinyi",
-    detail: "Forward · Age 11 — clinical finishing and relentless work rate in training.",
+    name: "kAMA",
+    detail: "Forward · Age 6 — clinical finishing and relentless work rate in training.",
   },
   {
-    title: "Match moment",
-    name: "3–2 comeback vs Kibera United",
-    detail: "Two late goals — proof of belief, fitness, and never switching off.",
+    title: "Training moment",
+    name: "Kama",
+    detail: "consistnent traing for three days — proof of belief, fitness, and never switching off.",
   },
 ];
 

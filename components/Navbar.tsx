@@ -21,15 +21,15 @@ import {
 } from "lucide-react";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Hero background images shown in the "docked-bottom" navbar band
-// Swap these paths for your actual academy spotlight images
+// Hero background images - Professional, high-quality academy spotlight images
+// Fully responsive with mobile-first approach
 // ─────────────────────────────────────────────────────────────────────────────
 const SPOTLIGHT_IMAGES = [
   "/images/Africankid.jpeg",
   "/images/Hero1.jpeg",
   "/images/Hero2.jpeg",
+  "/images/Hero5.jpeg",
   "/images/reactnowlog.png",
-  "/images/Hero5.jpeg"
 ];
 
 type NavSubItem = {
@@ -95,6 +95,7 @@ function hasActiveSubmenu(pathname: string, item: NavItem) {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Spotlight carousel — auto-advances every 4 s, cross-fades
+// Fully responsive with mobile-optimized image positioning
 // ─────────────────────────────────────────────────────────────────────────────
 function SpotlightCarousel() {
   const [idx, setIdx] = useState(0);
@@ -121,28 +122,34 @@ function SpotlightCarousel() {
             alt={`React Now FC spotlight ${i + 1}`}
             fill
             sizes="100vw"
-            style={{ objectFit: "cover", objectPosition: "center top" }}
+            style={{ 
+              objectFit: "cover", 
+              objectPosition: "center 20%",
+              transform: "scale(1)",
+            }}
             priority={i === 0}
+            quality={85}
           />
         </div>
       ))}
-      {/* Dark overlay so text stays readable */}
+      {/* Enhanced dark overlay for better text readability - responsive */}
       <div
         style={{
           position: "absolute",
           inset: 0,
-          background: "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.72) 100%)",
+          background: "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.85) 100%)",
         }}
       />
-      {/* Dot indicators */}
+      {/* Dot indicators - mobile friendly */}
       <div
         style={{
           position: "absolute",
-          bottom: 10,
+          bottom: "clamp(12px, 4vh, 24px)",
           left: "50%",
           transform: "translateX(-50%)",
           display: "flex",
-          gap: 6,
+          gap: "clamp(6px, 2vw, 10px)",
+          zIndex: 10,
         }}
       >
         {SPOTLIGHT_IMAGES.map((_, i) => (
@@ -151,10 +158,10 @@ function SpotlightCarousel() {
             onClick={() => setIdx(i)}
             aria-label={`Show spotlight ${i + 1}`}
             style={{
-              width: i === idx ? 20 : 6,
-              height: 6,
-              borderRadius: 3,
-              background: i === idx ? "#fff" : "rgba(255,255,255,0.4)",
+              width: i === idx ? "clamp(16px, 4vw, 24px)" : "clamp(6px, 2vw, 8px)",
+              height: "clamp(6px, 2vw, 8px)",
+              borderRadius: "clamp(3px, 1.5vw, 4px)",
+              background: i === idx ? "#38bdf8" : "rgba(255,255,255,0.5)",
               border: "none",
               padding: 0,
               cursor: "pointer",
@@ -180,39 +187,22 @@ export default function Navbar() {
   const [mobileMenu,  setMobileMenu]  = useState<string | null>(null);
   const [scrolled,    setScrolled]    = useState(false);
 
-  // ── Parabolic / spring scroll state ──────────────────────────────────────
-  // When page Y < DOCK_THRESHOLD the navbar floats at the bottom with the
-  // spotlight behind it.  Once the user scrolls past the threshold it springs
-  // up to the top with a satisfying overshoot.
-  const DOCK_THRESHOLD = 80; // px before the nav "launches" to the top
+  const DOCK_THRESHOLD = 80;
 
   const { scrollY } = useScroll();
-
-  // Raw 0-1 progress (0 = docked-bottom, 1 = pinned-top)
   const rawProgress = useTransform(scrollY, [0, DOCK_THRESHOLD], [0, 1]);
-  // Spring gives the parabolic / elastic feel
   const progress = useSpring(rawProgress, { stiffness: 220, damping: 28, mass: 0.6 });
-
-  // Vertical position: starts near bottom (calc(100vh - navHeight - 24px)), ends at 0
   const yPos = useTransform(progress, [0, 1], ["calc(100vh - 112px)", "0px"]);
-
-  // Width narrows slightly as it docks to top (full-bleed → contained)
   const navWidth  = useTransform(progress, [0, 1], ["100%", "100%"]);
   const navRadius = useTransform(progress, [0, 1], ["0px", "0px"]);
-
-  // Backdrop and bg shift from transparent-dark (over image) → white
   const bgOpacity = useTransform(progress, [0, 1], [0, 1]);
-
-  // Logo scales up when docked at bottom
   const logoScale = useTransform(progress, [0, 1], [1.18, 1]);
 
-  // ── Derived "is docked at bottom" boolean for conditional rendering ───────
   const [isDocked, setIsDocked] = useState(true);
   useEffect(() => {
     return progress.on("change", (v) => setIsDocked(v < 0.5));
   }, [progress]);
 
-  // ── Scroll listener for legacy `scrolled` flag (used by dropdown shadow) ─
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > DOCK_THRESHOLD);
     onScroll();
@@ -220,14 +210,12 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close on route change
   useEffect(() => {
     setMobileOpen(false);
     setMobileMenu(null);
     setDesktopMenu(null);
   }, [pathname]);
 
-  // Body scroll-lock for mobile menu
   useEffect(() => {
     if (mobileOpen) {
       document.body.style.cssText = "overflow:hidden;position:fixed;width:100%;height:100%";
@@ -237,7 +225,6 @@ export default function Navbar() {
     return () => { document.body.style.cssText = ""; };
   }, [mobileOpen]);
 
-  // Click-outside / Escape for desktop dropdowns
   useEffect(() => {
     const onMouseDown = (e: MouseEvent) => {
       if (navRef.current && !navRef.current.contains(e.target as Node)) setDesktopMenu(null);
@@ -261,7 +248,6 @@ export default function Navbar() {
     timeoutRef.current = setTimeout(() => setDesktopMenu(null), 150);
   };
 
-  // ── Render ────────────────────────────────────────────────────────────────
   return (
     <>
       {/* ── SPOTLIGHT BAND (only visible while docked at bottom) ── */}
@@ -280,86 +266,113 @@ export default function Navbar() {
             }}
           >
             <SpotlightCarousel />
-            {/* Academy tagline centred over the image */}
+            {/* Academy tagline centred over the image - fully responsive */}
             <div
               style={{
                 position: "absolute",
-                top: "38%",
+                top: "50%",
                 left: "50%",
                 transform: "translate(-50%, -50%)",
                 textAlign: "center",
                 color: "#fff",
                 pointerEvents: "none",
-                width: "90%",
+                width: "85%",
+                maxWidth: "800px",
+                zIndex: 5,
+                padding: "clamp(16px, 5vw, 32px)",
               }}
             >
-              <motion.p
+              {/* Nairobi, Kenya - Professional styling */}
+              <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.7 }}
                 style={{
-                  fontSize: "clamp(11px, 2vw, 14px)",
-                  letterSpacing: "0.22em",
-                  textTransform: "uppercase",
-                  color: "rgba(255,255,255,0.7)",
-                  marginBottom: 10,
-                  fontWeight: 500,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "6px 16px",
+                  background: "rgba(0,0,0,0.4)",
+                  backdropFilter: "blur(8px)",
+                  borderRadius: "40px",
+                  marginBottom: "clamp(16px, 4vw, 24px)",
+                  border: "1px solid rgba(255,255,255,0.2)",
                 }}
               >
-                Nairobi, Kenya
-              </motion.p>
+                <span style={{ fontSize: "clamp(14px, 3vw, 16px)" }}>📍</span>
+                <span style={{
+                  fontSize: "clamp(11px, 2.5vw, 13px)",
+                  letterSpacing: "0.15em",
+                  textTransform: "uppercase",
+                  fontWeight: 500,
+                  color: "rgba(255,255,255,0.95)",
+                }}>
+                  NAIROBI, KENYA
+                </span>
+              </motion.div>
+
               <motion.h1
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.45, duration: 0.7 }}
                 style={{
-                  fontSize: "clamp(28px, 6vw, 72px)",
+                  fontSize: "clamp(28px, 8vw, 72px)",
                   fontWeight: 800,
-                  lineHeight: 1.05,
+                  lineHeight: 1.1,
                   letterSpacing: "-0.02em",
                   color: "#fff",
-                  margin: "0 0 16px",
+                  margin: "0 0 clamp(12px, 3vw, 20px) 0",
+                  textShadow: "0 2px 20px rgba(0,0,0,0.3)",
                 }}
               >
                 React Now FC<br />
                 <span style={{ color: "#38bdf8" }}>Academy</span>
               </motion.h1>
+
               <motion.p
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6, duration: 0.7 }}
                 style={{
-                  fontSize: "clamp(13px, 2vw, 18px)",
-                  color: "rgba(255,255,255,0.8)",
-                  maxWidth: 520,
+                  fontSize: "clamp(13px, 3vw, 18px)",
+                  color: "rgba(255,255,255,0.9)",
+                  maxWidth: "550px",
                   margin: "0 auto",
                   lineHeight: 1.5,
+                  fontWeight: 400,
                 }}
               >
                 Grassroots football, education &amp; mentorship — building champions &amp; futures.
               </motion.p>
-              {/* Scroll hint */}
+
+              {/* Scroll hint - responsive */}
               <motion.div
-                animate={{ y: [0, 8, 0] }}
+                animate={{ y: [0, 10, 0] }}
                 transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-                style={{ marginTop: 32, display: "flex", justifyContent: "center" }}
+                style={{ 
+                  marginTop: "clamp(30px, 8vh, 50px)", 
+                  display: "flex", 
+                  justifyContent: "center" 
+                }}
               >
                 <div
                   style={{
-                    width: 28, height: 44,
+                    width: "clamp(26px, 6vw, 32px)",
+                    height: "clamp(40px, 8vw, 52px)",
                     border: "2px solid rgba(255,255,255,0.5)",
-                    borderRadius: 14,
+                    borderRadius: "clamp(14px, 4vw, 20px)",
                     display: "flex",
                     alignItems: "flex-start",
                     justifyContent: "center",
-                    paddingTop: 6,
+                    paddingTop: "clamp(8px, 2vw, 12px)",
                   }}
                 >
                   <div
                     style={{
-                      width: 4, height: 10,
+                      width: "3px",
+                      height: "clamp(8px, 2vw, 12px)",
                       background: "rgba(255,255,255,0.8)",
-                      borderRadius: 2,
+                      borderRadius: "2px",
                     }}
                   />
                 </div>
@@ -382,7 +395,6 @@ export default function Navbar() {
           borderRadius: navRadius,
         }}
       >
-        {/* Animated white backdrop (appears as nav travels to top) */}
         <motion.div
           style={{
             position: "absolute",
@@ -394,14 +406,13 @@ export default function Navbar() {
             transition: "box-shadow 0.3s ease",
           }}
         />
-        {/* While docked, show a dark glassmorphism band at the bottom */}
         <motion.div
           style={{
             position: "absolute",
             inset: 0,
-            background: "rgba(0,0,0,0.45)",
-            backdropFilter: "blur(12px)",
-            WebkitBackdropFilter: "blur(12px)",
+            background: "rgba(0,0,0,0.5)",
+            backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
             opacity: useTransform(progress, [0, 0.4], [1, 0]),
             borderTop: "1px solid rgba(255,255,255,0.15)",
           }}
@@ -411,22 +422,22 @@ export default function Navbar() {
           style={{
             maxWidth: 1440,
             margin: "0 auto",
-            padding: "0 1rem",
-            height: scrolled ? 76 : 88,
+            padding: "0 clamp(12px, 4vw, 24px)",
+            height: scrolled ? "clamp(60px, 12vh, 76px)" : "clamp(70px, 15vh, 88px)",
             transition: "height 0.3s ease",
             position: "relative",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "100%" }}>
 
-            {/* ── Logo ─────────────────────────────────────────────────────── */}
+            {/* ── Logo - Responsive ───────────────────────────────────────── */}
             <Link
               href="/"
               aria-label="React Now FC Academy home"
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: 12,
+                gap: "clamp(8px, 2vw, 12px)",
                 textDecoration: "none",
                 color: "inherit",
                 WebkitTapHighlightColor: "transparent",
@@ -438,8 +449,8 @@ export default function Navbar() {
                   position: "relative",
                   flexShrink: 0,
                   scale: logoScale,
-                  width:  scrolled ? 60 : 76,
-                  height: scrolled ? 60 : 76,
+                  width:  scrolled ? "clamp(44px, 10vw, 60px)" : "clamp(52px, 12vw, 76px)",
+                  height: scrolled ? "clamp(44px, 10vw, 60px)" : "clamp(52px, 12vw, 76px)",
                   transition: "width 0.3s ease, height 0.3s ease",
                 }}
               >
@@ -452,26 +463,28 @@ export default function Navbar() {
                   priority
                 />
               </motion.div>
-              <div>
+              <div style={{ display: "flex", flexDirection: "column" }}>
                 <div
                   style={{
                     fontWeight: 700,
-                    fontSize: scrolled ? 15 : 17,
+                    fontSize: scrolled ? "clamp(13px, 3vw, 15px)" : "clamp(14px, 3.5vw, 17px)",
                     transition: "font-size 0.3s ease",
                     color: isDocked ? "#fff" : "#0f172a",
                     lineHeight: 1.2,
+                    whiteSpace: "nowrap",
                   }}
                 >
                   React Now FC
                 </div>
                 <div
                   style={{
-                    fontSize: scrolled ? 10 : 11,
-                    color: isDocked ? "rgba(255,255,255,0.65)" : "#64748b",
+                    fontSize: scrolled ? "clamp(8px, 2vw, 10px)" : "clamp(9px, 2.2vw, 11px)",
+                    color: isDocked ? "rgba(255,255,255,0.7)" : "#64748b",
                     letterSpacing: "0.12em",
                     textTransform: "uppercase",
                     lineHeight: 1.2,
                     transition: "color 0.3s ease",
+                    whiteSpace: "nowrap",
                   }}
                 >
                   Academy
@@ -482,7 +495,7 @@ export default function Navbar() {
             {/* ── Desktop nav ───────────────────────────────────────────────── */}
             <div className="desktop-nav">
               <nav aria-label="Desktop navigation">
-                <div style={{ display: "flex", gap: 2, alignItems: "center" }}>
+                <div style={{ display: "flex", gap: "clamp(2px, 1vw, 4px)", alignItems: "center" }}>
                   {navigationItems.map((item) => {
                     const Icon  = item.icon;
                     const active = isActivePath(pathname, item.href) || hasActiveSubmenu(pathname, item);
@@ -504,16 +517,16 @@ export default function Navbar() {
                             style={{
                               display: "inline-flex",
                               alignItems: "center",
-                              gap: 6,
-                              padding: "7px 10px",
+                              gap: "clamp(4px, 1.5vw, 6px)",
+                              padding: "clamp(5px, 1.5vw, 7px) clamp(8px, 2vw, 12px)",
                               background: active
                                 ? isDocked ? "rgba(255,255,255,0.18)" : "#0f172a"
                                 : "transparent",
                               color: isDocked ? "#fff" : active ? "#fff" : "#334155",
                               border: "none",
-                              borderRadius: 10,
+                              borderRadius: "clamp(8px, 2vw, 10px)",
                               cursor: "pointer",
-                              fontSize: 13,
+                              fontSize: "clamp(11px, 2vw, 13px)",
                               fontWeight: 500,
                               transition: "all 0.2s ease",
                             }}
@@ -535,7 +548,7 @@ export default function Navbar() {
                                   left: 0,
                                   top: "100%",
                                   marginTop: 8,
-                                  width: 280,
+                                  width: "min(280px, 85vw)",
                                   background: "#fff",
                                   border: "1px solid #e2e8f0",
                                   borderRadius: 14,
@@ -587,15 +600,15 @@ export default function Navbar() {
                         style={{
                           display: "inline-flex",
                           alignItems: "center",
-                          gap: 6,
-                          padding: "7px 10px",
+                          gap: "clamp(4px, 1.5vw, 6px)",
+                          padding: "clamp(5px, 1.5vw, 7px) clamp(8px, 2vw, 12px)",
                           background: active
                             ? isDocked ? "rgba(255,255,255,0.18)" : "#0f172a"
                             : "transparent",
                           color: isDocked ? "#fff" : active ? "#fff" : "#334155",
-                          borderRadius: 10,
+                          borderRadius: "clamp(8px, 2vw, 10px)",
                           textDecoration: "none",
-                          fontSize: 13,
+                          fontSize: "clamp(11px, 2vw, 13px)",
                           fontWeight: 500,
                           transition: "all 0.2s ease",
                         }}
@@ -609,24 +622,26 @@ export default function Navbar() {
               </nav>
             </div>
 
-            {/* ── Right side ────────────────────────────────────────────────── */}
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            {/* ── Right side: Donate button only (social removed) ───────────── */}
+            <div style={{ display: "flex", alignItems: "center", gap: "clamp(12px, 3vw, 16px)" }}>
               <Link
                 href="/join/donate"
                 className="desktop-donate"
                 style={{
-                  display: "none",
+                  display: "inline-flex",
                   alignItems: "center",
-                  gap: 6,
-                  padding: "8px 16px",
-                  background: isDocked ? "rgba(255,255,255,0.92)" : "#0284c7",
+                  gap: "clamp(6px, 1.5vw, 8px)",
+                  padding: "clamp(6px, 1.5vw, 8px) clamp(16px, 4vw, 20px)",
+                  background: isDocked ? "rgba(255,255,255,0.95)" : "#0284c7",
                   color: isDocked ? "#0f172a" : "#fff",
-                  borderRadius: 10,
+                  borderRadius: "40px",
                   textDecoration: "none",
-                  fontSize: 14,
+                  fontSize: "clamp(12px, 2.5vw, 13px)",
                   fontWeight: 600,
                   transition: "all 0.3s ease",
-                  border: isDocked ? "1px solid rgba(255,255,255,0.3)" : "none",
+                  border: isDocked ? "none" : "none",
+                  boxShadow: isDocked ? "0 2px 8px rgba(0,0,0,0.1)" : "none",
+                  whiteSpace: "nowrap",
                 }}
               >
                 <Heart className="icon" />
@@ -644,15 +659,15 @@ export default function Navbar() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  width: 44,
-                  height: 44,
+                  width: "clamp(40px, 10vw, 44px)",
+                  height: "clamp(40px, 10vw, 44px)",
                   background: mobileOpen
                     ? "#f1f5f9"
                     : isDocked ? "rgba(255,255,255,0.15)" : "#fff",
                   border: mobileOpen
                     ? "2px solid #0f172a"
                     : isDocked ? "1px solid rgba(255,255,255,0.3)" : "1px solid #e2e8f0",
-                  borderRadius: 12,
+                  borderRadius: "clamp(10px, 2.5vw, 12px)",
                   cursor: "pointer",
                   transition: "all 0.2s ease",
                   color: mobileOpen ? "#0f172a" : isDocked ? "#fff" : "#334155",
@@ -677,7 +692,7 @@ export default function Navbar() {
             transition={{ duration: 0.25, ease: "easeInOut" }}
             style={{
               position: "fixed",
-              top: scrolled ? 76 : 88,
+              top: scrolled ? "clamp(60px, 12vh, 76px)" : "clamp(70px, 15vh, 88px)",
               left: 0,
               right: 0,
               bottom: 0,
@@ -688,8 +703,32 @@ export default function Navbar() {
               paddingBottom: "env(safe-area-inset-bottom, 20px)",
             }}
           >
-            <div style={{ padding: 16, minHeight: "100%", display: "flex", flexDirection: "column" }}>
-              <div style={{ backgroundColor: "#fff", borderRadius: 20, padding: 8, boxShadow: "0 4px 12px rgba(0,0,0,0.05)", flex: 1 }}>
+            <div style={{ padding: "clamp(12px, 4vw, 16px)", minHeight: "100%", display: "flex", flexDirection: "column" }}>
+              {/* Mobile Contact Info Card - Clean & Professional */}
+              <div style={{ 
+                backgroundColor: "#fff", 
+                borderRadius: "clamp(16px, 4vw, 20px)", 
+                padding: "clamp(14px, 4vw, 16px)", 
+                marginBottom: "clamp(12px, 3vw, 16px)", 
+                boxShadow: "0 4px 12px rgba(0,0,0,0.05)" 
+              }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "clamp(10px, 2.5vw, 12px)" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "clamp(13px, 3.5vw, 14px)", color: "#334155" }}>
+                    <span style={{ fontSize: "16px" }}>📍</span> 
+                    <span>Bee Centre Bar — Nasra Gardens Estate, Embakasi Central, Nairobi, Kenya</span>
+                  </div>
+                  <a href="tel:+254706255611" style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "clamp(13px, 3.5vw, 14px)", color: "#0284c7", textDecoration: "none" }}>
+                    <Phone className="icon" style={{ width: "16px", height: "16px" }} /> +254 706 255 611
+                  </a>
+                  <a href="mailto:info@reactnowfca.org" style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "clamp(13px, 3.5vw, 14px)", color: "#0284c7", textDecoration: "none" }}>
+                    <svg className="icon" style={{ width: "16px", height: "16px" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg> info@reactnowfca.org
+                  </a>
+                </div>
+              </div>
+
+              <div style={{ backgroundColor: "#fff", borderRadius: "clamp(16px, 4vw, 20px)", padding: "clamp(6px, 2vw, 8px)", boxShadow: "0 4px 12px rgba(0,0,0,0.05)", flex: 1 }}>
                 <nav style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                   {navigationItems.map((item) => {
                     const Icon       = item.icon;
@@ -714,14 +753,14 @@ export default function Navbar() {
                               display: "flex",
                               flex: 1,
                               alignItems: "center",
-                              gap: 14,
-                              padding: "14px 16px",
+                              gap: "clamp(12px, 3vw, 14px)",
+                              padding: "clamp(12px, 3.5vw, 14px) clamp(14px, 4vw, 16px)",
                               color: active ? "#0f172a" : "#334155",
                               fontWeight: active ? 600 : 500,
-                              fontSize: 16,
+                              fontSize: "clamp(14px, 3.5vw, 16px)",
                               textDecoration: "none",
                               borderRadius: 14,
-                              minHeight: 52,
+                              minHeight: "clamp(48px, 12vw, 52px)",
                             }}
                             onClick={() => { if (!hasSubmenu) setMobileOpen(false); }}
                           >
@@ -738,8 +777,8 @@ export default function Navbar() {
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                width: 52,
-                                height: 52,
+                                width: "clamp(44px, 12vw, 52px)",
+                                height: "clamp(44px, 12vw, 52px)",
                                 background: "transparent",
                                 border: "none",
                                 borderRadius: 14,
@@ -764,12 +803,12 @@ export default function Navbar() {
                             >
                               <div
                                 style={{
-                                  marginLeft: 52,
-                                  paddingLeft: 16,
+                                  marginLeft: "clamp(44px, 12vw, 52px)",
+                                  paddingLeft: "clamp(12px, 3vw, 16px)",
                                   borderLeft: "2px solid #e2e8f0",
                                   marginTop: 4,
                                   marginBottom: 4,
-                                  paddingRight: 8,
+                                  paddingRight: "clamp(6px, 2vw, 8px)",
                                 }}
                               >
                                 {item.submenu?.map((sub) => {
@@ -780,13 +819,13 @@ export default function Navbar() {
                                       href={sub.href}
                                       style={{
                                         display: "block",
-                                        padding: "12px 14px",
+                                        padding: "clamp(10px, 3vw, 12px) clamp(12px, 3.5vw, 14px)",
                                         marginBottom: 4,
                                         backgroundColor: subActive ? "#f1f5f9" : "transparent",
                                         color: subActive ? "#0f172a" : "#475569",
                                         borderRadius: 12,
                                         textDecoration: "none",
-                                        fontSize: 15,
+                                        fontSize: "clamp(13px, 3.5vw, 15px)",
                                         fontWeight: subActive ? 500 : 400,
                                         border: subActive ? "1px solid #e2e8f0" : "none",
                                       }}
@@ -797,7 +836,7 @@ export default function Navbar() {
                                         {subActive && <span style={{ fontSize: 8, color: "#0284c7" }}>●</span>}
                                       </div>
                                       {sub.description && (
-                                        <div style={{ fontSize: 13, color: subActive ? "#475569" : "#64748b", marginTop: 4, lineHeight: 1.4 }}>
+                                        <div style={{ fontSize: "clamp(11px, 3vw, 13px)", color: subActive ? "#475569" : "#64748b", marginTop: 4, lineHeight: 1.4 }}>
                                           {sub.description}
                                         </div>
                                       )}
@@ -814,22 +853,22 @@ export default function Navbar() {
                 </nav>
               </div>
 
-              <div style={{ marginTop: 16, position: "sticky", bottom: 16, zIndex: 46 }}>
+              <div style={{ marginTop: "clamp(12px, 4vw, 16px)", position: "sticky", bottom: 16, zIndex: 46 }}>
                 <Link
                   href="/join/donate"
                   style={{
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    gap: 10,
-                    padding: 16,
+                    gap: "clamp(8px, 2vw, 10px)",
+                    padding: "clamp(14px, 4vw, 16px)",
                     backgroundColor: "#0284c7",
                     color: "#fff",
-                    borderRadius: 16,
+                    borderRadius: "clamp(14px, 4vw, 16px)",
                     textDecoration: "none",
-                    fontSize: 17,
+                    fontSize: "clamp(15px, 4vw, 17px)",
                     fontWeight: 600,
-                    minHeight: 56,
+                    minHeight: "clamp(52px, 14vw, 56px)",
                     boxShadow: "0 8px 20px -4px rgba(2,132,199,0.3)",
                     border: "1px solid rgba(255,255,255,0.2)",
                   }}
@@ -839,7 +878,7 @@ export default function Navbar() {
                   <span>Support Our Academy</span>
                 </Link>
               </div>
-              <div style={{ height: 20 }} />
+              <div style={{ height: "clamp(16px, 4vw, 20px)" }} />
             </div>
           </motion.div>
         )}
@@ -850,14 +889,24 @@ export default function Navbar() {
         .icon { width: 16px; height: 16px; transition: transform 0.2s ease; }
         .icon-large  { width: 20px; height: 20px; }
         .icon-mobile { width: 20px; height: 20px; }
+
+        @media (max-width: 480px) {
+          .icon { width: 14px; height: 14px; }
+          .icon-large { width: 18px; height: 18px; }
+          .icon-mobile { width: 18px; height: 18px; }
+        }
+
         .rotated { transform: rotate(180deg); }
 
+        /* Desktop styles */
         @media (min-width: 1024px) {
           .desktop-nav    { display: flex !important; flex: 1; justify-content: center; }
           .desktop-donate { display: inline-flex !important; }
           .mobile-menu-button { display: none !important; }
           #mobile-navigation  { display: none !important; }
         }
+
+        /* Tablet and mobile styles */
         @media (max-width: 1023px) {
           .desktop-nav    { display: none !important; }
           .desktop-donate { display: none !important; }
@@ -871,10 +920,14 @@ export default function Navbar() {
           #mobile-navigation::-webkit-scrollbar-track { background: #f1f5f9; }
           #mobile-navigation::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
         }
+
+        /* Small mobile adjustments */
         @media (max-width: 380px) {
           .icon-mobile { width: 18px; height: 18px; }
-          #mobile-navigation a { padding: 12px 14px !important; min-height: 48px !important; }
+          #mobile-navigation a { padding: 10px 12px !important; min-height: 44px !important; }
         }
+
+        /* Safe area support for notched devices */
         @supports (padding: max(0px)) {
           #mobile-navigation {
             padding-left:  env(safe-area-inset-left);
