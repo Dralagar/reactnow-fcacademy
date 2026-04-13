@@ -25,7 +25,7 @@ import {
 // Fully responsive with mobile-first approach
 // ─────────────────────────────────────────────────────────────────────────────
 const SPOTLIGHT_IMAGES = [
-  "/images/Africankid.jpeg",
+  "/images/Africankid.png",
   "/images/Hero1.jpeg",
   "/images/Hero2.jpeg",
   "/images/Hero5.jpeg",
