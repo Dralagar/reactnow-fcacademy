@@ -55,8 +55,8 @@ const HIGHLIGHTS = [
 ];
 
 const IMPACT_STATS = [
-  { value: "50+", label: "Youth Players" },
-  { value: "12", label: "Countries Represented" },
+  { value: "15+", label: "Youth Players" },
+  { value: "4", label: "Countries Represented" },
   { value: "100%", label: "Free to Participate" },
   { value: "Structured", label: "Growth Pathway" },
 ];
