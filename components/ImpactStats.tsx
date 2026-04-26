@@ -3,11 +3,10 @@
 
 import { motion } from "framer-motion";
 import { Users, Globe, Zap, Target, Heart, TrendingUp } from "lucide-react";
-
 const stats = [
   { 
     icon: <Users className="w-8 h-8" />, 
-    value: "50+", 
+    value: "50zx+", 
     label: "Youth Athletes",
     change: "+15 this year",
     color: "blue"

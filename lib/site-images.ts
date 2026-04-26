@@ -3,20 +3,20 @@
  * Files must exist under public/ with matching spelling (e.g. Geo.JPG on case-sensitive hosts).
  */
 export const SITE_IMAGES = {
-  hero: "/images/Hero1.jpeg",
+  hero: "/images/React1.jpeg",
   /** Second hero slide / alternate header */
-  heroSecondary: "/images/Hero2.jpeg",
+  heroSecondary: "/images/React2.jpeg",
   /** Youth & community imagery */
-  heroYouth: "/images/Africankid.jpeg",
+  heroYouth: "/images/React4.jpeg",
   /** Match / pitch moment */
-  heroPitch: "/images/postpen.jpeg",
-  coachSession: "/images/Geo.JPG",
+  heroPitch: "/images/React.5",
+  coachSession: "/images/React6.jpeg",
   logo: "/images/reactnowlog.png",
   /**
    * Portrait-style shots for quotes (replace with /testimonials/*.jpg when you have
    * named headshots; these paths use your current public/images assets).
    */
-  testimonialParent: "/images/Africankid.jpeg",
+  testimonialParent: "/images/React4.jpeg",
   testimonialCoach: "/images/Geo.JPG",
   testimonialFounder: "/images/postpen.jpeg",
 } as const;

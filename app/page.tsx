@@ -49,9 +49,9 @@ const TESTIMONIALS = [
 ];
 
 const HIGHLIGHTS = [
-  { title: "Player of the Week", name: "James 'Jamo' Odhiambo", details: "Midfielder · Age 12 · 95% attendance", emoji: "🏆" },
-  { title: "Rising Star", name: "Sarah Akinyi", details: "Forward · Age 11 · Top scorer", emoji: "✨" },
-  { title: "Match Highlight", name: "3–2 Victory vs Kibera United", details: "Comeback win · 2 goals in final minutes", emoji: "⚽" },
+  { title: "Player of the Week", name: "Didi", details: "Midfielder · Age 12 · 95% attendance", emoji: "🏆" },
+  { title: "Rising Star", name: "Dingo", details: "Forward · Age 6 · Top scorer", emoji: "✨" },
+  { title: "Match Highlight", name: "Arietho", details: "Comeback win · 2 goals in final minutes", emoji: "⚽" },
 ];
 
 const IMPACT_STATS = [
@@ -103,16 +103,17 @@ function HeroCarousel() {
   };
 
   return (
-    <div className="absolute inset-0 z-0 overflow-hidden bg-[var(--secondary)]">
-      {HERO_IMAGES.map((slide, i) => (
-        <div
-          key={slide.src}
-          className={`absolute inset-0 transition-opacity duration-[700ms] ease-out ${
-            i === currentIndex ? "z-[1] opacity-100" : "z-0 opacity-0 pointer-events-none"
-          }`}
-          aria-hidden={i !== currentIndex}
-        >
-          <div className="absolute inset-0">
+    <>
+      {/* Background Images Container */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        {HERO_IMAGES.map((slide, i) => (
+          <div
+            key={slide.src}
+            className={`absolute inset-0 transition-opacity duration-[700ms] ease-out ${
+              i === currentIndex ? "z-[1] opacity-100" : "z-0 opacity-0 pointer-events-none"
+            }`}
+            aria-hidden={i !== currentIndex}
+          >
             <Image
               src={slide.src}
               alt={slide.alt}
@@ -122,9 +123,10 @@ function HeroCarousel() {
               priority={i === 0}
             />
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
 
+      {/* Navigation Buttons */}
       <button
         type="button"
         onClick={goToPrevious}
@@ -143,6 +145,7 @@ function HeroCarousel() {
         <ChevronRight size={24} className="text-white" />
       </button>
 
+      {/* Dot Indicators */}
       <div className="absolute bottom-6 left-0 right-0 z-20 flex items-center justify-center gap-2">
         {HERO_IMAGES.map((_, idx) => (
           <button
@@ -156,7 +159,7 @@ function HeroCarousel() {
           />
         ))}
       </div>
-    </div>
+    </>
   );
 }
 
@@ -167,15 +170,17 @@ function HeroCarousel() {
 export default function Home() {
   return (
     <main className="flex w-full flex-col bg-white">
-      {/* HERO SECTION - WITH EXTRA TOP PADDING TO AVOID NAVBAR OVERLAP */}
-      <section className="relative isolate flex min-h-screen w-full items-center overflow-hidden bg-[var(--secondary)] pt-20 lg:pt-24">
+      {/* HERO SECTION */}
+      <section className="relative isolate flex min-h-screen w-full items-center justify-center overflow-hidden pt-20 lg:pt-24">
+        {/* Background Carousel */}
         <HeroCarousel />
 
-        {/* Dark overlay for text contrast */}
+        {/* Overlay Layers for Text Contrast */}
         <div className="absolute inset-0 z-[5] bg-gradient-to-br from-primary-700/60 via-primary-600/40 to-secondary/50" aria-hidden />
         <div className="absolute inset-0 z-[6] bg-[linear-gradient(to_right,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:84px_84px] opacity-25" />
         <div className="absolute inset-0 z-[7] bg-gradient-to-t from-black/40 via-transparent to-transparent" />
 
+        {/* Content */}
         <div className="container-custom relative z-10 py-16 text-center sm:py-20 lg:py-24">
           <motion.div
             initial="hidden"
@@ -260,11 +265,41 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Rest of your sections remain the same */}
+      {/* Mission Section */}
       <section className="bg-white py-16 md:py-24">
-        {/* Mission section content - unchanged */}
         <div className="container-custom mx-auto max-w-7xl px-4">
-          {/* ... keep your existing mission section ... */}
+          <div className="mb-10 text-center">
+            <h2 className="mb-3 text-[clamp(1.8rem,4vw,2.8rem)] font-extrabold tracking-[-0.04em] text-secondary">
+              Our <span className="text-primary">Mission</span>
+            </h2>
+            <p className="mx-auto max-w-2xl text-base text-text-muted">
+              Building champions on and off the pitch through football, education, and mentorship.
+            </p>
+          </div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+            variants={staggerContainer}
+            className="flex flex-wrap justify-center gap-6"
+          >
+            {MISSION_CARDS.map((card, index) => (
+              <motion.div
+                key={`${card.title}-${index}`}
+                variants={fadeUp}
+                className={`group flex min-w-[260px] max-w-[320px] flex-1 flex-col rounded-2xl bg-gradient-to-br ${card.bgColor} p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-lg`}
+              >
+                <div className="mb-3 text-4xl">{card.emoji}</div>
+                <h3 className="mb-2 text-lg font-bold text-secondary">
+                  {card.title}
+                </h3>
+                <p className="text-sm leading-6 text-text-secondary">
+                  {card.desc}
+                </p>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
@@ -411,7 +446,7 @@ export default function Home() {
                     />
                   </div>
                   <p className="mb-4 text-sm italic leading-relaxed text-text-secondary">
-                    “{t.quote}”
+                    "{t.quote}"
                   </p>
                   <div className="text-sm font-bold text-text-primary">
                     {t.author}

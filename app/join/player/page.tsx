@@ -8,7 +8,7 @@ export default function JoinPlayerPage() {
       <SitePageHero
         title="Join as a Player"
         subtitle="For youth who are ready to learn, listen, and grow—with football as the classroom."
-        imageSrc="/images/Hero1.jpeg"
+        imageSrc="/images/React3.jpeg"
         imageAlt="Youth football training"
       />
       <section className="section">

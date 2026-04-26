@@ -27,11 +27,13 @@ import {
 // Hero background images
 // ─────────────────────────────────────────────────────────────────────────────
 const SPOTLIGHT_IMAGES = [
-  "/images/Africankid.png",
-  "/images/Hero1.jpeg",
-  "/images/Hero2.jpeg",
-  "/images/Hero5.jpeg",
-  "/images/reactnowlog.png",
+  "/images/React19.jpeg",
+  "/images/React1.jpeg",
+  "/images/React2.jpeg", 
+  "/images/React4.jpeg",
+  "/images/React6.jpeg",
+  "/images/React7.jpeg",
+  "/images/React8.jpeg",
 ];
 
 type NavSubItem = {
@@ -79,7 +81,7 @@ const navigationItems: NavItem[] = [
       { name: "Join as Player",  href: "/join/player",    description: "Become part of a structured growth journey."           },
       { name: "Volunteer",       href: "/join/volunteer", description: "Support mentoring, logistics, and community work."      },
       { name: "Partner With Us", href: "/join/partner",   description: "Collaborate to expand youth opportunity and impact."    },
-      { name: "Donate",          href: "/join/donate",    description: "Help fund safe, meaningful youth development."          },
+      { name: "Donate",          href: "/donate",         description: "Support youth development with M-Pesa donation."        },
     ],
   },
   { name: "Sustainability", href: "/sustainability", icon: Leaf },
@@ -601,7 +603,7 @@ export default function Navbar() {
                               fontWeight: 500,
                             }}
                           >
-                            <Icon style={{ width: "14px", height: "14px" }} />
+                            <Icon className="w-4 h-4" />
                             <span>{item.name}</span>
                             <ChevronDown style={{ width: "12px", height: "12px", transform: isOpen ? "rotate(180deg)" : "none" }} />
                           </button>
@@ -679,7 +681,7 @@ export default function Navbar() {
                           fontWeight: 500,
                         }}
                       >
-                        <Icon style={{ width: "14px", height: "14px" }} />
+                        <Icon className="w-4 h-4" />
                         <span>{item.name}</span>
                       </Link>
                     );
@@ -688,10 +690,10 @@ export default function Navbar() {
               </nav>
             </div>
 
-            {/* Right side: Donate button */}
+            {/* Right side: Donate button - NOW POINTS TO /donate */}
             <div style={{ display: "flex", alignItems: "center", gap: "clamp(12px, 3vw, 16px)" }}>
               <Link
-                href="/join/donate"
+                href="/donate"
                 className="desktop-donate"
                 style={{
                   display: "inline-flex",
@@ -708,7 +710,7 @@ export default function Navbar() {
                 }}
               >
                 <Heart style={{ width: "14px", height: "14px" }} />
-                <span>Support</span>
+                <span>Donate</span>
               </Link>
 
               <button
@@ -782,7 +784,7 @@ export default function Navbar() {
                   <a href="mailto:info@reactnowfca.org" style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "clamp(13px, 3.5vw, 14px)", color: "#0284c7", textDecoration: "none" }}>
                     <Mail style={{ width: "16px", height: "16px" }} /> info@reactnowfca.org
                   </a>
-                  {/* Social Icons in Mobile Menu - SAME PATTERN AS FOOTER */}
+                  {/* Social Icons in Mobile Menu */}
                   <div style={{ display: "flex", gap: "16px", paddingTop: "8px", borderTop: "1px solid #e2e8f0", marginTop: "4px", flexWrap: "wrap" }}>
                     {SOCIAL_LINKS.map((social) => (
                       <a
@@ -837,7 +839,7 @@ export default function Navbar() {
                             }}
                             onClick={() => { if (!hasSubmenu) setMobileOpen(false); }}
                           >
-                            <Icon style={{ width: "20px", height: "20px" }} />
+                            <Icon className="w-5 h-5" />
                             <span>{item.name}</span>
                             {active && !hasSubmenu && (
                               <span style={{ marginLeft: "auto", fontSize: 8, color: "#0284c7" }}>●</span>
@@ -928,7 +930,7 @@ export default function Navbar() {
 
               <div style={{ marginTop: "clamp(12px, 4vw, 16px)", position: "sticky", bottom: 16, zIndex: 46 }}>
                 <Link
-                  href="/join/donate"
+                  href="/donate"
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -948,7 +950,7 @@ export default function Navbar() {
                   onClick={() => setMobileOpen(false)}
                 >
                   <Heart style={{ width: "20px", height: "20px" }} />
-                  <span>Support Our Academy</span>
+                  <span>Donate via M-Pesa</span>
                 </Link>
               </div>
               <div style={{ height: "clamp(16px, 4vw, 20px)" }} />
@@ -957,7 +959,7 @@ export default function Navbar() {
         )}
       </AnimatePresence>
 
-      {/* Global Styles */}
+      {/* Fixed issue: Added '!' to ensure display overrides */}
       <style jsx global>{`
         @media (min-width: 1024px) {
           .desktop-nav { display: flex !important; flex: 1; justify-content: center; }
@@ -971,12 +973,27 @@ export default function Navbar() {
           .mobile-menu-button { display: flex !important; }
           #mobile-navigation {
             display: block !important;
+          }
+          /* Smooth scrolling and better touch behavior */
+          #mobile-navigation {
             scrollbar-width: thin;
             scrollbar-color: #cbd5e1 #f1f5f9;
+            -webkit-overflow-scrolling: touch;
           }
           #mobile-navigation::-webkit-scrollbar { width: 4px; }
           #mobile-navigation::-webkit-scrollbar-track { background: #f1f5f9; }
           #mobile-navigation::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
+        }
+        /* Ensure hero images are displayed properly */
+        .spotlight-image {
+          object-fit: cover;
+          object-position: center 20%;
+        }
+        /* Fix for GL and webkit rendering of backdrop-filter */
+        @supports (backdrop-filter: blur(12px)) {
+          .backdrop-blur {
+            backdrop-filter: blur(12px);
+          }
         }
         @media (max-width: 380px) {
           #mobile-navigation a { padding: 10px 12px !important; min-height: 44px !important; }

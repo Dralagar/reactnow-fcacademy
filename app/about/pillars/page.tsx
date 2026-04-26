@@ -14,7 +14,7 @@ export default function AboutPillarsPage() {
       <SitePageHero
         title="Core Pillars"
         subtitle="These are the values that shape every drill, decision, and conversation at React Now FC Academy."
-        imageSrc="/images/Geo.JPG"
+        imageSrc="/images/React7.jpeg"
         imageAlt="Coach mentoring young players"
       />
       <section className="section">

@@ -5,18 +5,18 @@ import SitePageHero from "@/components/SitePageHero";
 const spotlights = [
   {
     title: "Player of the Week",
-    name: "James 'Jamo' Odhiambo",
+    name: "Didi",
     detail: "Midfielder · Age 12 · 95% attendance — leads warm-ups and lifts teammates.",
   },
   {
     title: "Rising Star",
-    name: "kAMA",
+    name: "Dingo",
     detail: "Forward · Age 6 — clinical finishing and relentless work rate in training.",
   },
   {
     title: "Training moment",
-    name: "Kama",
-    detail: "consistnent traing for three days — proof of belief, fitness, and never switching off.",
+    name: "Arietho",
+    detail: "Consistently training for three days — proof of belief, fitness, and never switching off.",
   },
 ];
 
@@ -26,7 +26,7 @@ export default function TeamHighlightsPage() {
       <SitePageHero
         title="Player Highlights"
         subtitle="Celebrating discipline, effort, and the small wins that become careers and character."
-        imageSrc="/images/Hero1.jpeg"
+        imageSrc="/images/React13.jpeg"
         imageAlt="React Now FC match action"
       />
       <section className="section">
@@ -34,7 +34,7 @@ export default function TeamHighlightsPage() {
           <div className="mb-12 grid gap-8 lg:grid-cols-2 lg:items-stretch">
             <div className="relative min-h-[280px] overflow-hidden rounded-2xl border border-border shadow-lg lg:min-h-[320px]">
               <Image
-                src="/images/Hero1.jpeg"
+                src="/images/React15.jpeg"
                 alt="Youth football highlight moment"
                 fill
                 className="object-cover"
