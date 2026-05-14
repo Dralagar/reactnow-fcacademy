@@ -4,7 +4,9 @@ import { useEffect, useRef, useState, type ComponentType } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { SITE_IMAGES } from "@/lib/site-images";
+import { academyImages } from "@/lib/imageLibrary";
+import { NAV_SOCIAL_BRAND_LINKS } from "@/lib/social-brand-links";
+import { SocialBrandGlyph } from "@/components/SocialBrandGlyph";
 import { AnimatePresence, motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { FaWhatsapp } from "react-icons/fa";
 import {
@@ -86,18 +88,6 @@ const navigationItems: NavItem[] = [
   },
   { name: "Sustainability", href: "/sustainability", icon: Leaf },
   { name: "Contact",        href: "/contact",        icon: Phone },
-];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// SOCIAL LINKS - SAME AS FOOTER - Images directly in /public/images/
-// Using the exact same pattern that works in footer
-// ─────────────────────────────────────────────────────────────────────────────
-const SOCIAL_LINKS = [
-  { icon: "/images/Tiktok.jpeg",      href: "https://www.tiktok.com/@react_now.fc.academy",           label: "TikTok" },
-  { icon: "/images/Xlogo.png",        href: "https://x.com/reactnowfc",                               label: "X (Twitter)" },
-  { icon: "/images/InstLOGO.jpeg",    href: "https://www.instagram.com/reactnowfc_academy",          label: "Instagram" },
-  { icon: "/images/LinkedInLogo.png", href: "https://linkedin.com/company/reactnowfc",               label: "LinkedIn" },
-  { icon: "/images/facebooklogo.png", href: "https://facebook.com/reactnowfc",                       label: "Facebook" },
 ];
 
 function isActivePath(pathname: string, href: string) {
@@ -185,17 +175,16 @@ function SpotlightCarousel() {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Top Bar Component - Contact & Social Icons (appears above navbar when docked)
-// Using same Image pattern as footer for social icons
+// TopBar social icons use <img src={publicUrl}> for reliable paint in fixed layers
 // ─────────────────────────────────────────────────────────────────────────────
 function TopBar({ isVisible, isDocked }: { isVisible: boolean; isDocked: boolean }) {
   if (!isVisible) return null;
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: -20 }}
+      initial={false}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
       style={{
         position: "fixed",
         top: 0,
@@ -217,10 +206,12 @@ function TopBar({ isVisible, isDocked }: { isVisible: boolean; isDocked: boolean
           justifyContent: "space-between",
           flexWrap: "wrap",
           gap: "8px",
+          position: "relative",
+          zIndex: 1,
         }}
       >
         {/* Left side: Location & Contact */}
-        <div style={{ display: "flex", alignItems: "center", gap: "clamp(12px, 2vw, 20px)", flexWrap: "wrap" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "clamp(12px, 2vw, 20px)", flexWrap: "wrap", flex: "1 1 auto", minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: "6px", color: isDocked ? "rgba(255,255,255,0.85)" : "#fff" }}>
             <MapPin style={{ width: "12px", height: "12px" }} />
             <span style={{ fontSize: "clamp(10px, 2vw, 12px)" }}>Embakasi, Nairobi</span>
@@ -250,9 +241,18 @@ function TopBar({ isVisible, isDocked }: { isVisible: boolean; isDocked: boolean
           </a>
         </div>
 
-        {/* Right side: Social Icons - SAME PATTERN AS FOOTER */}
-        <div style={{ display: "flex", alignItems: "center", gap: "clamp(10px, 2vw, 14px)" }}>
-          {SOCIAL_LINKS.map((social) => (
+        {/* Right: social icons (above main navbar — contact left, social right) */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "clamp(8px, 2vw, 12px)",
+            flexShrink: 0,
+            minWidth: "max-content",
+            marginLeft: "auto",
+          }}
+        >
+          {NAV_SOCIAL_BRAND_LINKS.map((social) => (
             <a
               key={social.label}
               href={social.href}
@@ -263,21 +263,44 @@ function TopBar({ isVisible, isDocked }: { isVisible: boolean; isDocked: boolean
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                width: "24px",
-                height: "24px",
+                width: "28px",
+                height: "28px",
                 transition: "transform 0.2s ease",
+                position: "relative",
               }}
               onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.1)"}
               onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
             >
-              <Image 
-                src={social.icon} 
-                alt={social.label} 
-                width={20} 
-                height={20} 
-                className="object-contain"
-                style={{ filter: isDocked ? "brightness(0) invert(1)" : "none" }}
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  zIndex: 0,
+                  background: isDocked ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.1)",
+                  borderRadius: "8px",
+                  transition: "all 0.2s ease",
+                }}
               />
+              <div
+                style={{
+                  position: "relative",
+                  zIndex: 1,
+                  width: "24px",
+                  height: "24px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: "2px",
+                }}
+              >
+                <SocialBrandGlyph
+                  publicUrl={social.publicUrl}
+                  brand={social.brand}
+                  size={20}
+                  monochrome={isDocked}
+                  className="object-contain"
+                />
+              </div>
             </a>
           ))}
         </div>
@@ -312,7 +335,11 @@ export default function Navbar() {
 
   const [isDocked, setIsDocked] = useState(true);
   useEffect(() => {
-    return progress.on("change", (v) => setIsDocked(v < 0.5));
+    const syncDocked = () => {
+      setIsDocked(progress.get() < 0.5);
+    };
+    syncDocked();
+    return progress.on("change", syncDocked);
   }, [progress]);
 
   useEffect(() => {
@@ -362,6 +389,12 @@ export default function Navbar() {
 
   const showTopBar = isDocked && !scrolled;
   const navbarTopOffset = showTopBar ? "40px" : "0px";
+  /** Drawer must start below header + optional top bar, or first paint hides content under fixed chrome */
+  const mobileMenuTop = showTopBar
+    ? "calc(40px + clamp(64px, 12vh, 80px))"
+    : scrolled
+      ? "clamp(56px, 10vh, 70px)"
+      : "clamp(64px, 12vh, 80px)";
 
   return (
     <>
@@ -481,16 +514,21 @@ export default function Navbar() {
           style={{
             position: "absolute",
             inset: 0,
-            background: "#fff",
-            opacity: bgOpacity,
-            borderBottom: "1px solid rgba(226,232,240,0.8)",
+            zIndex: 0,
+            pointerEvents: "none",
+            background: scrolled ? "#fff" : "transparent",
+            opacity: scrolled ? 1 : 0,
+            borderBottom: scrolled ? "1px solid rgba(226,232,240,0.8)" : "none",
             boxShadow: scrolled ? "0 4px 20px rgba(0,0,0,0.08)" : "none",
+            transition: "all 0.3s ease",
           }}
         />
         <motion.div
           style={{
             position: "absolute",
             inset: 0,
+            zIndex: 0,
+            pointerEvents: "none",
             background: "rgba(0,0,0,0.5)",
             backdropFilter: "blur(16px)",
             opacity: useTransform(progress, [0, 0.4], [1, 0]),
@@ -500,12 +538,14 @@ export default function Navbar() {
 
         <div
           style={{
+            position: "relative",
+            zIndex: 2,
+            pointerEvents: "auto",
             maxWidth: 1440,
             margin: "0 auto",
             padding: "0 clamp(12px, 4vw, 24px)",
             height: scrolled ? "clamp(56px, 10vh, 70px)" : "clamp(64px, 12vh, 80px)",
             transition: "height 0.3s ease",
-            position: "relative",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "100%" }}>
@@ -523,24 +563,32 @@ export default function Navbar() {
               }}
               onClick={() => mobileOpen && setMobileOpen(false)}
             >
-              <motion.div
+              <div
                 style={{
                   position: "relative",
                   flexShrink: 0,
-                  scale: logoScale,
-                  width:  scrolled ? "clamp(40px, 8vw, 50px)" : "clamp(48px, 10vw, 65px)",
+                  width: scrolled ? "clamp(40px, 8vw, 50px)" : "clamp(48px, 10vw, 65px)",
                   height: scrolled ? "clamp(40px, 8vw, 50px)" : "clamp(48px, 10vw, 65px)",
                 }}
               >
-                <Image
-                  src={SITE_IMAGES.logo}
-                  alt="React Now FC Logo"
-                  fill
-                  sizes="80px"
-                  style={{ objectFit: "contain", padding: 2 }}
-                  priority
-                />
-              </motion.div>
+                <motion.div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    scale: logoScale,
+                  }}
+                >
+                  <Image
+                    src={academyImages.logo}
+                    alt="React Now FC Logo"
+                    fill
+                    sizes="80px"
+                    style={{ objectFit: "contain", padding: 2 }}
+                    priority
+                    unoptimized
+                  />
+                </motion.div>
+              </div>
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <div
                   style={{
@@ -750,12 +798,12 @@ export default function Navbar() {
             transition={{ duration: 0.25, ease: "easeInOut" }}
             style={{
               position: "fixed",
-              top: scrolled ? "clamp(56px, 10vh, 70px)" : "clamp(64px, 12vh, 80px)",
+              top: mobileMenuTop,
               left: 0,
               right: 0,
               bottom: 0,
               backgroundColor: "#f8fafc",
-              zIndex: 45,
+              zIndex: 60,
               overflowY: "auto",
               WebkitOverflowScrolling: "touch",
               paddingBottom: "env(safe-area-inset-bottom, 20px)",
@@ -785,17 +833,29 @@ export default function Navbar() {
                     <Mail style={{ width: "16px", height: "16px" }} /> info@reactnowfca.org
                   </a>
                   {/* Social Icons in Mobile Menu */}
-                  <div style={{ display: "flex", gap: "16px", paddingTop: "8px", borderTop: "1px solid #e2e8f0", marginTop: "4px", flexWrap: "wrap" }}>
-                    {SOCIAL_LINKS.map((social) => (
+                  <div style={{ display: "flex", gap: "16px", paddingTop: "8px", borderTop: "1px solid #e2e8f0", marginTop: "4px", flexWrap: "wrap", flexShrink: 0 }}>
+                    {NAV_SOCIAL_BRAND_LINKS.map((social) => (
                       <a
                         key={social.label}
                         href={social.href}
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={social.label}
-                        style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "28px", height: "28px" }}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          width: "28px",
+                          height: "28px",
+                          position: "relative",
+                        }}
                       >
-                        <Image src={social.icon} alt={social.label} width={24} height={24} className="object-contain" />
+                        <SocialBrandGlyph
+                          publicUrl={social.publicUrl}
+                          brand={social.brand}
+                          size={24}
+                          className="object-contain relative z-[1]"
+                        />
                       </a>
                     ))}
                   </div>

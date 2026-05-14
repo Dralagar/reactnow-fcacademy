@@ -1,5 +1,37 @@
 import SitePageHero from "@/components/SitePageHero";
 import { SITE_IMAGES } from "@/lib/site-images";
+import { Metadata } from "next";
+
+// SEO metadata for privacy page
+export const metadata: Metadata = {
+  title: "Privacy Policy | React Now FC Academy Nairobi",
+  description: "Privacy policy for React Now FC Academy - Nairobi's accessible football training program. Learn how we protect your information and ensure data privacy for players and families.",
+  keywords: [
+    "React Now FC privacy policy",
+    "football academy privacy",
+    "youth sports data protection",
+    "accessible sports programs privacy",
+    "football academy information security",
+    "sports academy GDPR compliance",
+    "children's data protection",
+    "sports academy privacy Nairobi"
+  ],
+  openGraph: {
+    title: "Privacy Policy - React Now FC Academy | Data Protection",
+    description: "Learn how React Now FC Academy protects your privacy and data. Our commitment to information security for players, families, and partners.",
+    images: [
+      {
+        url: "/og-privacy.jpg",
+        width: 1200,
+        height: 630,
+        alt: "React Now FC Academy Privacy Policy"
+      }
+    ]
+  },
+  alternates: {
+    canonical: "https://reactnowfc.org/privacy"
+  }
+};
 
 export default function PrivacyPage() {
   return (

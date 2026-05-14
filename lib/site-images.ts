@@ -9,7 +9,7 @@ export const SITE_IMAGES = {
   /** Youth & community imagery */
   heroYouth: "/images/React4.jpeg",
   /** Match / pitch moment */
-  heroPitch: "/images/React.5",
+  heroPitch: "/images/React5.jpeg",
   coachSession: "/images/React6.jpeg",
   logo: "/images/reactnowlog.png",
   /**

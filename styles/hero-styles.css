@@ -1,0 +1,200 @@
+/* Hero Image Responsive Styles */
+/* Ensures hero images display properly across all viewports */
+
+/* Base hero container styles */
+.hero-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Hero image responsive behavior */
+.hero-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 25%; /* Focus on upper portion to avoid navbar overlap */
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 640px) {
+  .hero-image {
+    object-position: center 35%; /* Adjust for mobile viewport */
+  }
+}
+
+/* Tablet-specific adjustments */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .hero-image {
+    object-position: center 30%; /* Adjust for tablet viewport */
+  }
+}
+
+/* Desktop-specific adjustments */
+@media (min-width: 1025px) {
+  .hero-image {
+    object-position: center 25%; /* Standard desktop positioning */
+  }
+}
+
+/* Large desktop adjustments */
+@media (min-width: 1440px) {
+  .hero-image {
+    object-position: center 20%; /* Focus more on center for large screens */
+  }
+}
+
+/* Ultra-wide adjustments */
+@media (min-width: 1920px) {
+  .hero-image {
+    object-position: center 15%; /* Center focus for ultra-wide screens */
+  }
+}
+
+/* Ensure proper aspect ratio maintenance */
+.hero-aspect-16-9 {
+  aspect-ratio: 16/9;
+}
+
+.hero-aspect-21-9 {
+  aspect-ratio: 21/9;
+}
+
+.hero-full-height {
+  min-height: 100vh;
+}
+
+.hero-responsive-height {
+  min-height: 60vh;
+}
+
+@media (min-width: 768px) {
+  .hero-responsive-height {
+    min-height: 70vh;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-responsive-height {
+    min-height: 80vh;
+  }
+}
+
+/* Overlay gradients for text readability */
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.3) 30%,
+    rgba(0, 0, 0, 0.5) 70%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Hero content positioning */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding-top: 80px; /* Account for transparent navbar */
+  transition: padding-top 0.3s ease;
+}
+
+@media (min-width: 768px) {
+  .hero-content {
+    padding-top: 100px;
+  }
+}
+
+/* Parallax effect styles */
+.hero-parallax {
+  transform: translateY(0);
+  will-change: transform;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .hero-parallax {
+    transform: none !important;
+    will-change: auto;
+  }
+  
+  .hero-image {
+    object-position: center center;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .hero-overlay {
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.3) 0%,
+      rgba(0, 0, 0, 0.6) 30%,
+      rgba(0, 0, 0, 0.8) 70%,
+      rgba(0, 0, 0, 0.9) 100%
+    );
+  }
+}
+
+/* Loading states */
+.hero-image-loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Error state for hero images */
+.hero-image-error {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+}
+
+/* Social media icon fixes */
+.social-icon {
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.social-icon:hover {
+  transform: scale(1.1);
+}
+
+.social-icon-error {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: #ccc;
+  border-radius: 4px;
+  position: relative;
+}
+
+.social-icon-error::after {
+  content: "🔗";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+}

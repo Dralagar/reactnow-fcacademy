@@ -7,8 +7,8 @@
  * ║  CHANGES IN THIS VERSION                                                ║
  * ║    • Contact row  → flex flex-wrap gap-4 (flex-1 min-w-[200px] cards)  ║
  * ║    • Bottom bar quick-links → gap-x-6 gap-y-2 + whitespace-nowrap      ║
- * ║    • Social icons using string paths from /public/images/              ║
- * ║    • Added WhatsApp contact for better accessibility                   ║
+ * ║    • Social icons: /public images + SVG fallback (social-brand-links) ║
+ * ║    • Added WhatsApp contact for better accessibility                    ║
  * ╚══════════════════════════════════════════════════════════════════════════╝
  */
 
@@ -34,7 +34,10 @@ import {
   CalendarDays,
 } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
-import { SITE_IMAGES } from "@/lib/site-images";
+import { academyImages } from "@/lib/imageLibrary";
+import type { FooterSocialBrandLink } from "@/lib/social-brand-links";
+import { FOOTER_SOCIAL_BRAND_LINKS } from "@/lib/social-brand-links";
+import { SocialBrandGlyph } from "@/components/SocialBrandGlyph";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -60,12 +63,6 @@ interface FooterSection {
   accentColor: string;
 }
 
-interface SocialLink {
-  icon: string;
-  href: string;
-  label: string;
-  gradient: string;
-}
 
 interface ImpactStat {
   icon: React.ComponentType<{ className?: string }>;
@@ -159,18 +156,10 @@ const FOOTER_SECTIONS: FooterSection[] = [
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
-// SOCIAL LINKS - Images are directly in /public/images/
+// SOCIAL LINKS — same assets as Navbar (static imports in lib/social-brand-links)
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SOCIAL_LINKS: SocialLink[] = [
-  { icon: "/images/Tiktok.jpeg",         href: "https://www.tiktok.com/@react_now.fc.academy?_r=1&_t=ZS-95UZc6038WD",                       label: "TikTok",      gradient: "from-black to-gray-800"           },
-  { icon: "/images/Xlogo.png",           href: "https://x.com/reactnowfc?s=21",                       label: "X (Twitter)", gradient: "from-slate-600 to-slate-800"      },
-  { icon: "/images/InstLOGO.jpeg",       href: "https://www.instagram.com/reactnowfc_academy?igsh=ODluamo4NGhhbHdl&utm_source=qr",                     label: "Instagram",   gradient: "from-[#e4405f] to-[#d81f3d]"      },
-  { icon: "/images/LinkedInLogo.png",        href: "https://linkedin.com/company/reactnowfc",              label: "LinkedIn",    gradient: "from-[#0077b5] to-[#005582]"      },
-  { icon: "/images/facebooklogo.png",   href: "https://facebook.com/reactnowfc",                      label: "Facebook",    gradient: "from-[#1877f2] to-[#0e5fc7]"      },
-  { icon: "/images/mastadonLogo.png",    href: "https://mastodon.social/@reactnowfc",                  label: "Mastodon",    gradient: "from-[#6364ff] to-[#4a4ad6]"      },
-  { icon: "/images/slack.png",           href: "https://join.slack.com/t/reactnowfc/shared_invite/xxx",label: "Slack",       gradient: "from-[#4A154B] to-[#36123b]"      },
-];
+const SOCIAL_LINKS: FooterSocialBrandLink[] = FOOTER_SOCIAL_BRAND_LINKS;
 
 const QUICK_LINKS: QuickLink[] = [
   { name: "Privacy", href: "/privacy" },
@@ -327,7 +316,7 @@ export default function Footer() {
               >
                 <div className="relative h-[4.5rem] w-[4.5rem] shrink-0 overflow-hidden rounded-2xl bg-white shadow-md shadow-black/20 ring-1 ring-white/20 transition-transform duration-300 group-hover:scale-[1.02]">
                   <Image
-                    src={SITE_IMAGES.logo}
+                    src={academyImages.logo}
                     alt="React Now FC Academy logo"
                     fill
                     sizes="72px"
@@ -509,12 +498,11 @@ export default function Footer() {
                         aria-hidden="true"
                       />
                       <div className="relative w-12 h-12 bg-surface rounded-xl flex items-center justify-center border border-border/50 group-hover:border-transparent transition-all overflow-hidden p-2">
-                        <Image 
-                          src={social.icon} 
-                          alt={social.label} 
-                          width={28} 
-                          height={28} 
-                          className="object-contain" 
+                        <SocialBrandGlyph
+                          publicUrl={social.publicUrl}
+                          brand={social.brand}
+                          size={28}
+                          className="object-contain relative z-[1]"
                         />
                       </div>
                     </a>

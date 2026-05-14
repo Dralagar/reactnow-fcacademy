@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  # Development version with hot reload
+  app-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: react-nowfc-academy-dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_TELEMETRY_DISABLED=1
+      - NEXT_PUBLIC_SITE_URL=http://localhost:3000
+      - CHOKIDAR_USEPOLLING=true
+    restart: unless-stopped
+    volumes:
+      # Mount source code for hot reload
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    networks:
+      - react-nowfc-dev-network
+    stdin_open: true
+    tty: true
+
+networks:
+  react-nowfc-dev-network:
+    driver: bridge
+    name: react-nowfc-dev-network

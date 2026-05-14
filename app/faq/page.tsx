@@ -1,4 +1,36 @@
 import SitePageHero from "@/components/SitePageHero";
+import { Metadata } from "next";
+
+// SEO metadata for FAQ page
+export const metadata: Metadata = {
+  title: "FAQ | React Now FC Academy Nairobi",
+  description: "Frequently asked questions about React Now FC Academy - Nairobi's accessible football training. Find answers about programs, enrollment, costs, and accessibility. All abilities welcome.",
+  keywords: [
+    "React Now FC FAQ",
+    "football academy questions",
+    "accessible sports programs FAQ",
+    "youth football enrollment",
+    "football training costs",
+    "inclusive sports programs",
+    "football academy Nairobi FAQ",
+    "special needs football questions"
+  ],
+  openGraph: {
+    title: "FAQ - React Now FC Academy | Your Questions Answered",
+    description: "Get answers to common questions about Nairobi's accessible football academy - programs, enrollment, costs, and accessibility information.",
+    images: [
+      {
+        url: "/og-faq.jpg",
+        width: 1200,
+        height: 630,
+        alt: "React Now FC Academy FAQ - Your Questions Answered"
+      }
+    ]
+  },
+  alternates: {
+    canonical: "https://reactnowfc.org/faq"
+  }
+};
 
 const faqs: { q: string; a: string }[] = [
   {
@@ -24,14 +56,21 @@ const faqs: { q: string; a: string }[] = [
 ];
 
 export default function FaqPage() {
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    { label: "FAQ", href: "/faq" }
+  ];
+
   return (
     <main className="flex min-h-screen flex-col bg-white">
       <SitePageHero
         title="Frequently Asked Questions"
         subtitle="Straight answers for families, players, and supporters—tap a question to read more."
-        imageSrc="/images/Geo.JPG"
+        imageSrc="/images/React3.jpeg"
         imageAlt="React Now FC FAQ"
         minHeightClass="min-h-[36vh]"
+        showBreadcrumb={true}
+        breadcrumbItems={breadcrumbItems}
       />
       <section className="section bg-surface">
         <div className="container-custom mx-auto max-w-3xl px-4">

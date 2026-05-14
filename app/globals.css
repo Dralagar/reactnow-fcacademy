@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Hero Image Responsive Styles */
+@import '../styles/hero-styles.css';
+
+/* Homepage Professional Layout Styles */
+@import '../styles/homepage.css';
+
+/* Professional Layout System */
+@import '../styles/professional-layout.css';
+
 /* =========================
    Design Tokens - Color Palette
    WCAG AA Compliant Contrast Ratios

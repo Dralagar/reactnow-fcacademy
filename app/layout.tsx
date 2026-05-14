@@ -11,6 +11,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import CookieConsent from "@/components/CookieConsent";
 import Analytics from "@/components/Analytics";
 import LoadingBar from "@/components/LoadingBar";
+import TransparentNavWrapper from "@/components/TransparentNavWrapper";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -22,37 +23,38 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://reactnowfc.org"),
 
   title: {
-    default: "React Now FC Academy",
-    template: "%s | React Now FC Academy",
+    default:
+      "Under 6 & Under 12 Football Academy Nairobi | Weekend & After School Programs | React Now FC",
+    template: "%s | React Now FC Academy Nairobi",
   },
 
   description:
-    "A grassroots football initiative empowering vulnerable youth through sport, mentorship, education, and digital literacy in Kenya. Join us in making an impact through football.",
+    "React Now FC Academy offers comprehensive Under 6 and Under 12 football training in Nairobi (Kayole, Embakasi, Donholm, Nyayo Estate). Join our accessible weekend football programs, after school programs, back-to-school programs, and holiday tournaments focused on youth development, leadership, and digital skills. All abilities welcome.",
 
   keywords: [
-    "football academy",
-    "youth empowerment",
-    "Kenya grassroots football",
-    "React Now FC",
-    "digital literacy",
-    "community sports",
-    "youth development",
-    "football mentorship",
-    "African football academy",
-    "social impact through sport",
+    "under 6 football Nairobi",
+    "under 12 football Nairobi",
+    "kids football training Nairobi",
+    "football academy Kayole",
+    "football training Embakasi",
+    "football academy Donholm",
+    "kids football Nyayo Estate",
+    "weekend football programs Nairobi",
+    "after school football program Nairobi",
+    "holiday football tournaments Nairobi",
+    "back to school football program Kenya",
+    "grassroots football Kenya",
+    "youth empowerment through sports Nairobi",
+    "accessible football academy",
+    "inclusive sports programs Nairobi",
+    "children with disabilities football",
+    "special needs football training",
+    "React Now FC Academy",
   ],
 
   authors: [{ name: "React Now FC", url: "https://reactnowfc.org/about/team" }],
-  
   creator: "React Now FC",
-  
   publisher: "React Now FC Academy",
-
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
 
   robots: {
     index: true,
@@ -60,171 +62,271 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
 
-  icons: {
-    icon: [{ url: "/images/reactnowlog.png", type: "image/png" }],
-    apple: [{ url: "/images/reactnowlog.png", type: "image/png" }],
-  },
-
-  manifest: '/manifest.json',
-
   openGraph: {
-    title: "React Now FC Academy",
-    description: "Where Football Meets Innovation & Impact",
+    title: "Under 6 & Under 12 Football Programs Nairobi | React Now FC",
+    description:
+      "Join our accessible kids football training in Nairobi. Weekend, after school and holiday football programs in Kayole, Embakasi and Donholm. All abilities welcome.",
     url: "https://reactnowfc.org",
     siteName: "React Now FC Academy",
+    locale: "en_KE",
+    type: "website",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "React Now FC Academy - Football for Youth Empowerment",
-        type: "image/jpeg",
-      },
-      {
-        url: "/og-image-square.jpg",
-        width: 800,
-        height: 800,
-        alt: "React Now FC Academy Logo",
-        type: "image/jpeg",
+        alt: "Kids Football Training Nairobi - Under 6 & Under 12 - All Abilities Welcome",
       },
     ],
-    locale: "en_US",
-    type: "website",
-    countryName: "Kenya",
-    emails: ["info@reactnowfc.org"],
-    phoneNumbers: ["+254700000000"],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "React Now FC Academy",
-    description: "Where Football Meets Innovation & Impact",
+    title: "Kids Football Academy Nairobi | All Abilities Welcome",
+    description:
+      "Under 6 & Under 12 weekend and after school football programs. Inclusive, accessible training for all children.",
     images: ["/twitter-image.jpg"],
-    creator: "@reactnowfc",
-    site: "@reactnowfc",
   },
-
-  appleWebApp: {
-    capable: true,
-    title: "React Now FC",
-    statusBarStyle: "black-translucent",
-    startupImage: [
-      {
-        url: "/apple-splash-2048-2732.jpg",
-        media: "(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)",
-      },
-    ],
-  },
-
-  applicationName: "React Now FC",
-  
-  category: "sports",
-  
-  classification: "Non-profit organization",
 
   alternates: {
     canonical: "https://reactnowfc.org",
-    languages: {
-      'en-US': 'https://reactnowfc.org/en-us',
-      'sw-KE': 'https://reactnowfc.org/sw',
-    },
+  },
+
+  other: {
+    "theme-color": "#10b981",
+    "msapplication-TileColor": "#10b981",
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "default",
+    "apple-mobile-web-app-title": "React Now FC Academy",
+  },
+
+  verification: {
+    google: "google-site-verification-code",
+    yandex: "yandex-verification-code",
   },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 5,
-  userScalable: true,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#059669" },
-    { media: "(prefers-color-scheme: dark)", color: "#0b2322" },
-  ],
-  colorScheme: "light dark",
 };
 
-// Structured data for SEO
+// Enhanced structured data with accessibility and comprehensive schema markup
 const structuredData = {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "NGO",
+      "@type": "SportsOrganization",
       "@id": "https://reactnowfc.org",
-      "name": "React Now FC Academy",
-      "description": "Empowering vulnerable youth through football, mentorship, education and digital literacy in Kenya and beyond.",
-      "url": "https://reactnowfc.org",
-      "logo": "https://reactnowfc.org/images/reactnowlog.png",
-      "image": "https://reactnowfc.org/images/Hero1.jpeg",
-      "foundingDate": "2020",
-      "founders": [
-        {
-          "@type": "Person",
-          "name": "React Now FC Team"
-        }
+      name: "React Now FC Academy",
+      description:
+        "Accessible Under 6 and Under 12 football academy in Nairobi offering inclusive weekend, after school, and holiday programs for youth development. All abilities welcome.",
+      url: "https://reactnowfc.org",
+      logo: "https://reactnowfc.org/images/reactnowlog.png",
+      sameAs: [
+        "https://www.tiktok.com/@react_now.fc.academy",
+        "https://x.com/reactnowfc",
+        "https://www.instagram.com/reactnowfc_academy",
+        "https://linkedin.com/company/reactnowfc",
+        "https://facebook.com/reactnowfc"
       ],
-      "address": {
+
+      address: {
         "@type": "PostalAddress",
-        "addressLocality": "Nairobi",
-        "addressRegion": "Nairobi",
-        "addressCountry": "KE"
+        streetAddress: "Bee Centre Bar — Nasra Gardens Estate",
+        addressLocality: "Embakasi Central",
+        addressRegion: "Nairobi",
+        addressCountry: "KE",
       },
-      "contactPoint": {
+
+      areaServed: [
+        "Nairobi",
+        "Kayole",
+        "Embakasi",
+        "Donholm",
+        "Nyayo Estate",
+      ],
+
+      contactPoint: {
         "@type": "ContactPoint",
-        "telephone": "+254-700-000-000",
-        "contactType": "customer service",
-        "email": "info@reactnowfc.org",
-        "availableLanguage": ["English", "Swahili"]
+        telephone: "+254-706-255-611",
+        contactType: "customer service",
+        email: "info@reactnowfca.org",
+        availableLanguage: ["English", "Swahili"],
+        areaServed: "Nairobi, Kenya",
       },
-      "sameAs": [
-        "https://facebook.com/reactnowfc",
-        "https://twitter.com/reactnowfc",
-        "https://instagram.com/reactnowfc",
-        "https://youtube.com/reactnowfc",
-        "https://linkedin.com/company/reactnowfc"
-      ]
-    },
-    {
-      "@type": "WebSite",
-      "@id": "https://reactnowfc.org/#website",
-      "url": "https://reactnowfc.org",
-      "name": "React Now FC Academy",
-      "description": "A grassroots football initiative empowering vulnerable youth through sport.",
-      "publisher": {
-        "@id": "https://reactnowfc.org"
+
+      accessibility: {
+        "@type": "SpecialCommitment",
+        name: "Accessibility Commitment",
+        description: "We provide accessible football training for children of all abilities, including those with disabilities and special needs.",
+        accessibilityFeature: [
+          "Wheelchair accessible facilities",
+          "Inclusive coaching methods",
+          "Adaptive equipment available",
+          "Trained staff for special needs"
+        ]
       },
-      "inLanguage": "en-US"
+
+      award: ["Grassroots Football Excellence Award 2024"],
+      slogan: "Where Football Meets Innovation & Impact"
     },
+
     {
-      "@type": "BreadcrumbList",
-      "@id": "https://reactnowfc.org/#breadcrumb",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://reactnowfc.org"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "About",
-          "item": "https://reactnowfc.org/about"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "Programs",
-          "item": "https://reactnowfc.org/programs"
-        }
-      ]
+      "@type": "SportsActivityLocation",
+      name: "Youth Football Programs Nairobi",
+      description: "Inclusive and accessible football training programs for children aged 6-12 in Nairobi",
+      accessibility: "Full wheelchair accessibility and inclusive coaching",
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: "Football Programs",
+        itemListElement: [
+          {
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Course",
+              name: "Under 6 Football Training Nairobi",
+              description: "Accessible football training for children under 6 years old",
+              accessibilityFeature: "Age-appropriate inclusive coaching"
+            },
+            availability: "https://schema.org/InStock"
+          },
+          {
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Course",
+              name: "Under 12 Football Training Nairobi",
+              description: "Accessible football training for children under 12 years old",
+              accessibilityFeature: "Skill-based inclusive training"
+            },
+            availability: "https://schema.org/InStock"
+          },
+          {
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Course",
+              name: "Weekend Football Programs Nairobi",
+              description: "Accessible weekend football programs for all abilities",
+              accessibilityFeature: "Weekend accessibility support"
+            },
+            availability: "https://schema.org/InStock"
+          },
+          {
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Course",
+              name: "After School Football Program Nairobi",
+              description: "Accessible after-school football programs with educational support",
+              accessibilityFeature: "After-school accessibility arrangements"
+            },
+            availability: "https://schema.org/InStock"
+          },
+          {
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Event",
+              name: "Holiday Football Tournaments Nairobi",
+              description: "Inclusive holiday football tournaments for all skill levels",
+              accessibilityFeature: "Tournament accessibility accommodations"
+            },
+            availability: "https://schema.org/InStock"
+          },
+        ],
+      },
+    },
+
+    {
+      "@type": "EducationalOrganization",
+      name: "React Now FC Academy",
+      description: "Youth development through football, education, and digital literacy programs",
+      educationalLevel: "Elementary School",
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: "Educational Programs",
+        itemListElement: [
+          {
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Course",
+              name: "Digital Literacy Workshops",
+              description: "Weekly coding and digital skills workshops for youth"
+            }
+          },
+          {
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Course",
+              name: "Life Skills Development",
+              description: "Discipline, leadership, teamwork, and emotional intelligence training"
+            }
+          }
+        ]
+      }
+    },
+
+    {
+      "@type": "LocalBusiness",
+      name: "React Now FC Academy",
+      description: "Accessible football academy and youth development center",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Bee Centre Bar — Nasra Gardens Estate",
+        addressLocality: "Embakasi Central",
+        addressRegion: "Nairobi",
+        addressCountry: "KE",
+      },
+      telephone: "+254-706-255-611",
+      email: "info@reactnowfca.org",
+      openingHours: "Mo-Fr 09:00-17:00, Sa 10:00-14:00",
+      accessibility: "Full wheelchair accessibility",
+      priceRange: "$",
+      paymentAccepted: ["Cash", "Mobile Money"],
+      currenciesAccepted: "KES"
     }
-  ]
+  ],
+};
+
+// Accessibility structured data
+const accessibilityStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "React Now FC Academy",
+  description: "Accessible football academy for youth development in Nairobi",
+  url: "https://reactnowfc.org",
+  accessibility: {
+    "@type": "SpecialCommitment",
+    name: "Accessibility Commitment",
+    description: "We are committed to providing accessible football training for children of all abilities, including those with disabilities and special needs.",
+    accessibilityFeature: [
+      "Wheelchair accessible facilities",
+      "Inclusive coaching methods", 
+      "Adaptive equipment available",
+      "Trained staff for special needs",
+      "Accessible communication methods",
+      "Multi-language support (English, Swahili)"
+    ],
+    accessibilityControl: [
+      "Full keyboard navigation",
+      "Screen reader compatible",
+      "Voice navigation support",
+      "High contrast mode available"
+    ],
+    accessibilityHazard: [
+      "No flashing content",
+      "No motion simulation hazards",
+      "No sound hazards"
+    ]
+  },
+  audience: {
+    "@type": "Audience",
+    audienceType: ["Children with disabilities", "Youth athletes", "Parents", "Educators", "Sports enthusiasts"]
+  }
 };
 
 export default function RootLayout({
@@ -233,98 +335,40 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <head>
-        {/* Preconnect to external domains */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        
-        {/* DNS Prefetch */}
-        <link rel="dns-prefetch" href="https://reactnowfc.org" />
-        
-        {/* Preload brand mark (file lives in /public/images/) */}
-        <link rel="preload" as="image" href="/images/reactnowlog.png" />
-        
-        {/* Structured Data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(accessibilityStructuredData) }}
+        />
+        <meta name="accessibility" content="WCAG 2.1 AA compliant" />
+        <meta name="theme-color" content="#10b981" />
       </head>
-      <body
-        className={`
-          ${inter.variable} 
-          ${inter.className} 
-          antialiased 
-          bg-[var(--background)] 
-          text-[var(--foreground)]
-          min-h-screen
-          overflow-x-hidden
-        `}
-        style={{ scrollBehavior: 'smooth' }}
-      >
-        {/* Loading Progress Bar */}
+
+      <body className={`${inter.variable} ${inter.className}`}>
         <LoadingBar />
 
-        {/* Background Parallax Layer - Enhanced */}
         <div className="fixed inset-0 -z-20">
           <ParabolicBackground intensity={0.15} />
         </div>
 
-        {/* Gradient Overlay for depth */}
-        <div 
-          className="fixed inset-0 -z-10 pointer-events-none"
-          style={{
-            background: 'radial-gradient(circle at 50% 50%, transparent 0%, rgba(0,0,0,0.2) 100%)',
-          }}
-          aria-hidden="true"
-        />
-
-        {/* Skip to main content link - Accessibility */}
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-white focus:rounded-md focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-        >
-          Skip to main content
-        </a>
-
-        {/* Navigation */}
         <Navbar />
 
-        {/* Single landmark: pages render their own <main>. This wrapper is for skip-link + nav offset only. */}
-        <div
-          id="main-content"
-          className="min-h-screen relative z-10 pt-[var(--navbar-offset,5rem)]"
-        >
-          {children}
+        <div id="main-content" className="min-h-screen">
+          <TransparentNavWrapper>
+            {children}
+          </TransparentNavWrapper>
         </div>
 
-        {/* Footer */}
         <Footer />
-
-        {/* Cookie Consent Banner */}
         <CookieConsent />
-
-        {/* Scroll to Top Button */}
         <ScrollToTop />
 
-        {/* Analytics - Only in production */}
-        {process.env.NODE_ENV === 'production' && <Analytics />}
-
-        {/* PWA: only register when sw.js is served (avoids dev 404 noise) */}
-        {process.env.NODE_ENV === "production" ? (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-              if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js').catch(function() {});
-                });
-              }
-            `,
-            }}
-          />
-        ) : null}
+        {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>
   );

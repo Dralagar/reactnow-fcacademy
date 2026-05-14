@@ -1,0 +1,96 @@
+version: '3.8'
+
+services:
+  # React Now FC Academy Next.js Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: react-nowfc-academy
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+      - NEXT_PUBLIC_SITE_URL=http://localhost:3000
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - react-nowfc-network
+    volumes:
+      # Optional: Mount public uploads directory if needed
+      - ./public/uploads:/app/public/uploads:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.react-nowfc.rule=Host(`localhost`)"
+      - "traefik.http.services.react-nowfc.loadbalancer.server.port=3000"
+
+  # Nginx Reverse Proxy (Optional - for production)
+  nginx:
+    image: nginx:alpine
+    container_name: react-nowfc-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - app
+    restart: unless-stopped
+    networks:
+      - react-nowfc-network
+    profiles:
+      - production
+
+  # Redis for caching (Optional)
+  redis:
+    image: redis:7-alpine
+    container_name: react-nowfc-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    networks:
+      - react-nowfc-network
+    profiles:
+      - cache
+
+  # PostgreSQL Database (Optional - if you add database features)
+  postgres:
+    image: postgres:15-alpine
+    container_name: react-nowfc-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=reactnowfc
+      - POSTGRES_USER=reactnowfc_user
+      - POSTGRES_PASSWORD=reactnowfc_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    restart: unless-stopped
+    networks:
+      - react-nowfc-network
+    profiles:
+      - database
+
+networks:
+  react-nowfc-network:
+    driver: bridge
+    name: react-nowfc-network
+
+volumes:
+  redis_data:
+    driver: local
+    name: react-nowfc-redis-data
+  postgres_data:
+    driver: local
+    name: react-nowfc-postgres-data
